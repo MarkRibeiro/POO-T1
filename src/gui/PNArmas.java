@@ -12,6 +12,7 @@ public class PNArmas extends JPanel implements MouseListener {
 	Celula tab[][]=new Celula[32][32];
 	Line2D.Double ln[]=new Line2D.Double[64];
 	CtrlRegras ctrl;
+	boolean b = false;
 	
 	public PNArmas(CtrlRegras c) {
 		double x=xIni,y=yIni;
@@ -64,6 +65,12 @@ public class PNArmas extends JPanel implements MouseListener {
 			g2d.drawString(String.valueOf((char)(65+i)), (int)xIni-20, (int)(yIni+20+alt*i));
 		}
 		
+		JButton pronto = new JButton();
+		pronto.setText("Tabuleiro Pronto!");
+		pronto.setBounds(570, 620, 160, 30);
+		this.add(pronto);
+		pronto.setEnabled(b);
+		this.setLayout(null);
 	}
 	
 	public void mouseClicked(MouseEvent e) {
