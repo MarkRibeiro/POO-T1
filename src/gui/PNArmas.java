@@ -14,8 +14,7 @@ public class PNArmas extends JPanel implements MouseListener {
 	Line2D.Double ln[]=new Line2D.Double[64];
 	CtrlRegras ctrl;
 	boolean b = false;
-	ConjuntoArmas hidro;
-	int desloca = 750;
+	ConjuntoArmas hidro, cruzador, destroyer, sub, couro;
 	
 	
 	public PNArmas(CtrlRegras c) {
@@ -46,6 +45,8 @@ public class PNArmas extends JPanel implements MouseListener {
 		Rectangle2D rt;
 		int mat[][]=ctrl.getMatriz();
 		int vez=ctrl.getVez();
+		double deslocaX = 500;
+		double deslocaY = 0;
 		
 		g2d.setStroke(new BasicStroke(2.0f,
                 BasicStroke.CAP_BUTT,
@@ -69,11 +70,44 @@ public class PNArmas extends JPanel implements MouseListener {
 			g2d.drawString(String.valueOf((char)(65+i)), (int)xIni-20, (int)(yIni+20+alt*i));
 		}
 		
-		for (int i = 0; i < 5; i++ ) {
+		for (int i = 0; i < 5; i++ ) { //hidroaviao
 			hidro = new ConjuntoArmas();
-			hidro.hidroaviao(g2d, xIni-desloca, yIni, altQuadrado, largQuadrado);
-			desloca-=99;
+			hidro.hidroaviao(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			deslocaX-=99;
 		}
+		
+		deslocaX=750;
+		deslocaY+=50;
+		
+		for (int i = 0; i < 4; i++ ) {//Submarino
+			sub = new ConjuntoArmas();
+			sub.submarinos(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			deslocaX-=43;
+		}		
+		
+		deslocaX=750;
+		deslocaY+=50;
+		
+		for (int i = 0; i < 3; i++ ) {//Destroyer
+			destroyer = new ConjuntoArmas();
+			destroyer.destroyers(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			deslocaX-=71;
+		}
+		
+		deslocaX=750;
+		deslocaY+=50;
+		
+		for (int i = 0; i < 2; i++ ) {//Cruzadores
+			cruzador = new ConjuntoArmas();
+			cruzador.cruzadores(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			deslocaX-=127;
+		}
+		
+		deslocaX=750;
+		deslocaY+=50;
+		
+		couro = new ConjuntoArmas();
+		couro.cruzadores(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
 		
 		
 		JButton pronto = new JButton();
@@ -98,9 +132,7 @@ public class PNArmas extends JPanel implements MouseListener {
 		repaint();
 	}
 	
-	public void mouseEntered(MouseEvent e) {
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
