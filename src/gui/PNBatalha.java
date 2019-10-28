@@ -7,7 +7,7 @@ import java.awt.event.*;
 import regras.*;
  
 public class PNBatalha extends JPanel implements MouseListener {
-	double xIni=800.0,yIni=150.0,larg=30,alt=30,espLinha=0.0;
+	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
 	int iClick,jClick;
 	Celula tab1[][]=new Celula[32][32];
 	Celula tab2[][]=new Celula[32][32];
@@ -60,7 +60,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 		int mat[][]=ctrl.getMatriz();
 		int vez=ctrl.getVez();
 		
-		g2d.setStroke(new BasicStroke(5.0f,
+		g2d.setStroke(new BasicStroke(2.0f,
                 BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER,
                 10.0f));

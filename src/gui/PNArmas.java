@@ -7,12 +7,16 @@ import java.awt.event.*;
 import regras.*;
  
 public class PNArmas extends JPanel implements MouseListener {
-	double xIni=800.0,yIni=150.0,larg=30,alt=30,espLinha=0.0;
+	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
+	double altQuadrado=28, largQuadrado=28;
 	int iClick,jClick;
 	Celula tab[][]=new Celula[32][32];
 	Line2D.Double ln[]=new Line2D.Double[64];
 	CtrlRegras ctrl;
 	boolean b = false;
+	ConjuntoArmas hidro;
+	int desloca = 750;
+	
 	
 	public PNArmas(CtrlRegras c) {
 		double x=xIni,y=yIni;
@@ -43,7 +47,7 @@ public class PNArmas extends JPanel implements MouseListener {
 		int mat[][]=ctrl.getMatriz();
 		int vez=ctrl.getVez();
 		
-		g2d.setStroke(new BasicStroke(5.0f,
+		g2d.setStroke(new BasicStroke(2.0f,
                 BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER,
                 10.0f));
@@ -64,6 +68,13 @@ public class PNArmas extends JPanel implements MouseListener {
 			g2d.drawString(String.valueOf(i+1), (int)(xIni+10+alt*i), (int)yIni-10);
 			g2d.drawString(String.valueOf((char)(65+i)), (int)xIni-20, (int)(yIni+20+alt*i));
 		}
+		
+		for (int i = 0; i < 5; i++ ) {
+			hidro = new ConjuntoArmas();
+			hidro.hidroaviao(g2d, xIni-desloca, yIni, altQuadrado, largQuadrado);
+			desloca-=99;
+		}
+		
 		
 		JButton pronto = new JButton();
 		pronto.setText("Tabuleiro Pronto!");
