@@ -40,14 +40,14 @@ public class ConjuntoArmas {
 			double desloca = 0;
 			for (int i = 0; i<4 ;i++) {
 					rt=new Rectangle2D.Double(xIni+desloca,yIni,larg,alt);
-					g2d.fill(rt);
 					desloca += larg;
+					g2d.fill(rt);
 			}
 		}
 		
 		public void couracados(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
 			Rectangle2D rt;
-			g2d.setPaint(Color.black);
+			g2d.setPaint(new Color(151, 86, 18, 255));
 			double desloca = 0;
 			for (int i = 0; i < 5 ;i++) {
 					rt=new Rectangle2D.Double(xIni+desloca,yIni,larg,alt);
@@ -57,8 +57,8 @@ public class ConjuntoArmas {
 		}
 		
 		public void submarinos(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
-			Rectangle2D rt;
-			g2d.setPaint(Color.green);
+			Rectangle2D rt; 
+			g2d.setPaint(new Color(43, 161, 77, 255));
 			rt=new Rectangle2D.Double(xIni,yIni,larg,alt);
 			g2d.fill(rt);
 			}

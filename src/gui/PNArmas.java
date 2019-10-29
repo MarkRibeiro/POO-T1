@@ -45,8 +45,8 @@ public class PNArmas extends JPanel implements MouseListener {
 		Rectangle2D rt;
 		int mat[][]=ctrl.getMatriz();
 		int vez=ctrl.getVez();
-		double deslocaX = 500;
-		double deslocaY = 0;
+		double deslocaX = 750;
+		double deslocaY = 28;
 		
 		g2d.setStroke(new BasicStroke(2.0f,
                 BasicStroke.CAP_BUTT,
@@ -77,7 +77,7 @@ public class PNArmas extends JPanel implements MouseListener {
 		}
 		
 		deslocaX=750;
-		deslocaY+=50;
+		deslocaY+=90;
 		
 		for (int i = 0; i < 4; i++ ) {//Submarino
 			sub = new ConjuntoArmas();
@@ -86,7 +86,7 @@ public class PNArmas extends JPanel implements MouseListener {
 		}		
 		
 		deslocaX=750;
-		deslocaY+=50;
+		deslocaY+=90;
 		
 		for (int i = 0; i < 3; i++ ) {//Destroyer
 			destroyer = new ConjuntoArmas();
@@ -95,7 +95,7 @@ public class PNArmas extends JPanel implements MouseListener {
 		}
 		
 		deslocaX=750;
-		deslocaY+=50;
+		deslocaY+=90;
 		
 		for (int i = 0; i < 2; i++ ) {//Cruzadores
 			cruzador = new ConjuntoArmas();
@@ -104,10 +104,10 @@ public class PNArmas extends JPanel implements MouseListener {
 		}
 		
 		deslocaX=750;
-		deslocaY+=50;
+		deslocaY+=90;
 		
-		couro = new ConjuntoArmas();
-		couro.cruzadores(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+		couro = new ConjuntoArmas(); //Curacados
+		couro.couracados(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
 		
 		
 		JButton pronto = new JButton();
