@@ -14,6 +14,7 @@ public class PNArmas extends JPanel implements MouseListener {
 	Line2D.Double ln[]=new Line2D.Double[64];
 	CtrlRegras ctrl;
 	boolean b = false;
+	double armasCoord[] = new double[30];
 	ConjuntoArmas hidro, cruzador, destroyer, sub, couro;
 	
 	
@@ -70,9 +71,14 @@ public class PNArmas extends JPanel implements MouseListener {
 			g2d.drawString(String.valueOf((char)(65+i)), (int)xIni-20, (int)(yIni+20+alt*i));
 		}
 		
+		
+		//armas
+		int j = 0;
 		for (int i = 0; i < 5; i++ ) { //hidroaviao
 			hidro = new ConjuntoArmas();
 			hidro.hidroaviao(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			armasCoord[j++]= xIni-deslocaX;
+			armasCoord[j++]= yIni-deslocaY;
 			deslocaX-=99;
 		}
 		
@@ -82,6 +88,8 @@ public class PNArmas extends JPanel implements MouseListener {
 		for (int i = 0; i < 4; i++ ) {//Submarino
 			sub = new ConjuntoArmas();
 			sub.submarinos(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			armasCoord[j++]= xIni-deslocaX;
+			armasCoord[j++]= yIni-deslocaY;
 			deslocaX-=43;
 		}		
 		
@@ -91,6 +99,8 @@ public class PNArmas extends JPanel implements MouseListener {
 		for (int i = 0; i < 3; i++ ) {//Destroyer
 			destroyer = new ConjuntoArmas();
 			destroyer.destroyers(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			armasCoord[j++]= xIni-deslocaX;
+			armasCoord[j++]= yIni-deslocaY;
 			deslocaX-=71;
 		}
 		
@@ -100,6 +110,8 @@ public class PNArmas extends JPanel implements MouseListener {
 		for (int i = 0; i < 2; i++ ) {//Cruzadores
 			cruzador = new ConjuntoArmas();
 			cruzador.cruzadores(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+			armasCoord[j++]= xIni-deslocaX;
+			armasCoord[j++]= yIni-deslocaY;
 			deslocaX-=127;
 		}
 		
@@ -108,6 +120,8 @@ public class PNArmas extends JPanel implements MouseListener {
 		
 		couro = new ConjuntoArmas(); //Curacados
 		couro.couracados(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
+		armasCoord[j++]= xIni-deslocaX;
+		armasCoord[j++]= yIni-deslocaY;
 		
 		
 		JButton pronto = new JButton();
@@ -120,16 +134,8 @@ public class PNArmas extends JPanel implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 		double x=e.getX(),y=e.getY();
-		x-=xIni;
-		y-=yIni;
-		
-		x = Math.floor(x/larg);
-		y = Math.floor(y/alt);
-		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			ctrl.jogada((int)y,(int)x);
-			System.out.printf("(%.2f, %.2f)\n", x, y);
-		}
-		repaint();
+		ControleClickArmas click = new ControleClickArmas();
+		if (click.submarino(armasCoord[10:18], x, y))
 	}
 	
 	public void mouseEntered(MouseEvent e) {}
