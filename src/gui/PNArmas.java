@@ -8,7 +8,7 @@ import regras.*;
  
 public class PNArmas extends JPanel implements MouseListener {
 	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
-	double altQuadrado=28, largQuadrado=28;
+	double tamanhoQuadrado=28;
 	int iClick,jClick;
 	Celula tab[][]=new Celula[32][32];
 	Line2D.Double ln[]=new Line2D.Double[64];
@@ -16,6 +16,13 @@ public class PNArmas extends JPanel implements MouseListener {
 	boolean b = false;
 	double armasCoord[] = new double[30];
 	ConjuntoArmas hidro, cruzador, destroyer, sub, couro;
+	Celula hidroCelula[][]=new Celula[2][3];
+	int hidroMatriz[][] = {{0,1,0},{1,0,1}};
+	int subMatriz[][] = {{1}};
+	int desMatriz[][] = {{1,1}};
+	int cruzaMatriz[][] = {{1,1,1,1}};
+	int couroMatriz[][] = {{1,1,1,1,1}};
+	
 	
 	
 	public PNArmas(CtrlRegras c) {
@@ -71,57 +78,12 @@ public class PNArmas extends JPanel implements MouseListener {
 			g2d.drawString(String.valueOf((char)(65+i)), (int)xIni-20, (int)(yIni+20+alt*i));
 		}
 		
+		hidro = new ConjuntoArmas();
+		hidro.setBounds( (int)(xIni-deslocaX), (int)yIni, (int)tamanhoQuadrado*3, (int)tamanhoQuadrado*2);
+		add(hidro);
+		hidro.constroi(hidroMatriz, hidroCelula, g2d, tamanhoQuadrado, new Color(64, 85, 27, 255));
 		
-		//armas
-		int j = 0;
-		for (int i = 0; i < 5; i++ ) { //hidroaviao
-			hidro = new ConjuntoArmas();
-			hidro.hidroaviao(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
-			armasCoord[j++]= xIni-deslocaX;
-			armasCoord[j++]= yIni-deslocaY;
-			deslocaX-=99;
-		}
 		
-		deslocaX=750;
-		deslocaY+=90;
-		
-		for (int i = 0; i < 4; i++ ) {//Submarino
-			sub = new ConjuntoArmas();
-			sub.submarinos(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
-			armasCoord[j++]= xIni-deslocaX;
-			armasCoord[j++]= yIni-deslocaY;
-			deslocaX-=43;
-		}		
-		
-		deslocaX=750;
-		deslocaY+=90;
-		
-		for (int i = 0; i < 3; i++ ) {//Destroyer
-			destroyer = new ConjuntoArmas();
-			destroyer.destroyers(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
-			armasCoord[j++]= xIni-deslocaX;
-			armasCoord[j++]= yIni-deslocaY;
-			deslocaX-=71;
-		}
-		
-		deslocaX=750;
-		deslocaY+=90;
-		
-		for (int i = 0; i < 2; i++ ) {//Cruzadores
-			cruzador = new ConjuntoArmas();
-			cruzador.cruzadores(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
-			armasCoord[j++]= xIni-deslocaX;
-			armasCoord[j++]= yIni-deslocaY;
-			deslocaX-=127;
-		}
-		
-		deslocaX=750;
-		deslocaY+=90;
-		
-		couro = new ConjuntoArmas(); //Curacados
-		couro.couracados(g2d, xIni-deslocaX, yIni+deslocaY, altQuadrado, largQuadrado);
-		armasCoord[j++]= xIni-deslocaX;
-		armasCoord[j++]= yIni-deslocaY;
 		
 		
 		JButton pronto = new JButton();
@@ -134,8 +96,8 @@ public class PNArmas extends JPanel implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 		double x=e.getX(),y=e.getY();
-		ControleClickArmas click = new ControleClickArmas();
-		if (click.submarino(armasCoord[10:18], x, y))
+		
+		
 	}
 	
 	public void mouseEntered(MouseEvent e) {}

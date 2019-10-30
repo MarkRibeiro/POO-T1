@@ -2,66 +2,55 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
-public class ConjuntoArmas {
+import javax.swing.JPanel;
 
-	public void hidroaviao(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
+public class ConjuntoArmas extends JPanel implements MouseListener{
+	
+	
+	
+	public void constroi (int armaMatriz[][], Celula celulaMatriz[][], Graphics2D g2d, double tamanho, Color cor ) {
+		g2d.setPaint(cor);
 		Rectangle2D rt;
-		double desloca = 0;
-		g2d.setPaint(new Color(64, 85, 27, 255));
-		for (int i = 0; i<3 ;i++) {
-			if(i == 2) {
-				desloca=larg;
-				rt=new Rectangle2D.Double(xIni+desloca,yIni-desloca,larg,alt);
+		double desloca = 0;		
+		
+		for(int i=0;i<armaMatriz.length;i++) {
+			for(int j=0;j<armaMatriz[i].length;j++) {
+				if(i == 0) {
+					celulaMatriz[i][j]=new Celula(desloca,0);
+					desloca=tamanho;
+				}else {
+					celulaMatriz[i][j]=new Celula(desloca,(+desloca));
+					desloca=tamanho;
+				}
+					
 			}
-			else{
-				rt=new Rectangle2D.Double(xIni+desloca,yIni,larg,alt);
-				desloca=larg+larg;
+		}
+		
+		for(int i = 0; i < armaMatriz.length; i++) {
+			for(int j = 0; j < armaMatriz[i].length;j++) {
+				if( armaMatriz[i][j]==1 ) {
+					rt=new Rectangle2D.Double(celulaMatriz[i][j].x,celulaMatriz[i][j].y,tamanho,tamanho);
+					g2d.fill(rt);
+				}
 			}
-			g2d.fill(rt);
 		}
 	}
-		
-		public void destroyers(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
-			Rectangle2D rt;
-			g2d.setPaint(new Color(255, 229, 72, 255));
-			double desloca = 0;
-			for (int i = 0; i<2 ;i++) {
-					rt=new Rectangle2D.Double(xIni+desloca,yIni,larg,alt);
-					g2d.fill(rt);
-					desloca += larg;
-			}
+		public void mouseClicked(MouseEvent e) {
+			double x=e.getX(),y=e.getY();
+			
+			
 		}
 		
-		public void cruzadores(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
-			Rectangle2D rt;
-			g2d.setPaint(new Color(255, 167, 27, 255));
-			double desloca = 0;
-			for (int i = 0; i<4 ;i++) {
-					rt=new Rectangle2D.Double(xIni+desloca,yIni,larg,alt);
-					desloca += larg;
-					g2d.fill(rt);
-			}
-		}
-		
-		public void couracados(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
-			Rectangle2D rt;
-			g2d.setPaint(new Color(151, 86, 18, 255));
-			double desloca = 0;
-			for (int i = 0; i < 5 ;i++) {
-					rt=new Rectangle2D.Double(xIni+desloca,yIni,larg,alt);
-					g2d.fill(rt);
-					desloca += larg;
-			}
-		}
-		
-		public void submarinos(Graphics2D g2d,  double xIni, double yIni, double larg , double alt) {
-			Rectangle2D rt; 
-			g2d.setPaint(new Color(43, 161, 77, 255));
-			rt=new Rectangle2D.Double(xIni,yIni,larg,alt);
-			g2d.fill(rt);
-			}
-		}
+		public void mouseEntered(MouseEvent e) {}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}		
+
+
+}
 		
 
