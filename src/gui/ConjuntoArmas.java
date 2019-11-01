@@ -1,54 +1,54 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.*;
 
-import javax.swing.JPanel;
-
-public class ConjuntoArmas extends JPanel implements MouseListener{
+public class ConjuntoArmas extends JPanel {
+		
+	private double tamanho;
+	private Color cor;
+	private int matriz[][];
 	
+	public ConjuntoArmas(int armaMatriz[][], double tamanhoArma, Color corArma ) {
+		this.cor = corArma;
+		this.tamanho = tamanhoArma;
+		this.matriz = armaMatriz;
+		
+		this.setBackground(new Color(0, 0, 0, 0));
+	}
 	
-	
-	public void constroi (int armaMatriz[][], Celula celulaMatriz[][], Graphics2D g2d, double tamanho, Color cor ) {
-		g2d.setPaint(cor);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d=(Graphics2D) g;
 		Rectangle2D rt;
-		double desloca = 0;		
 		
-		for(int i=0;i<armaMatriz.length;i++) {
-			for(int j=0;j<armaMatriz[i].length;j++) {
-				if(i == 0) {
-					celulaMatriz[i][j]=new Celula(desloca,0);
-					desloca=tamanho;
-				}else {
-					celulaMatriz[i][j]=new Celula(desloca,(+desloca));
-					desloca=tamanho;
-				}
-					
-			}
-		}
+		g2d.setStroke(new BasicStroke(2.0f,
+                BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER,
+                10.0f));
 		
-		for(int i = 0; i < armaMatriz.length; i++) {
-			for(int j = 0; j < armaMatriz[i].length;j++) {
-				if( armaMatriz[i][j]==1 ) {
-					rt=new Rectangle2D.Double(celulaMatriz[i][j].x,celulaMatriz[i][j].y,tamanho,tamanho);
+		
+		
+		
+		//addMouseListener(this);
+		//this.setLayout(null);
+		//this.setVisible(true);
+		for(int i = 0; i < matriz.length; i++) {
+			for(int j = 0; j < matriz[i].length;j++) {
+				rt=new Rectangle2D.Double(j*tamanho,i*tamanho,tamanho,tamanho);
+				if( matriz[i][j]==1 ) {
+					g2d.setPaint(cor);
+					g2d.fill(rt);
+				}else{
+					g2d.setPaint(new Color(0, 0, 0, 0));
 					g2d.fill(rt);
 				}
 			}
 		}
 	}
-		public void mouseClicked(MouseEvent e) {
-			double x=e.getX(),y=e.getY();
-			
-			
-		}
-		
-		public void mouseEntered(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}		
+	
+	
 
 
 }
