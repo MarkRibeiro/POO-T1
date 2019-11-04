@@ -28,7 +28,11 @@ public class Movimento implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getButton() == MouseEvent.BUTTON3) {
+			armas.whenOtherClicked(3,indice);
+		}else if(e.getButton() == MouseEvent.BUTTON2) {
+			armas.whenOtherClicked(2,indice);
+		}
 		
 	}
 
@@ -54,7 +58,7 @@ public class Movimento implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		armas.whenReleased(e);
+		armas.whenReleased(e, indice);
 	}
 
 

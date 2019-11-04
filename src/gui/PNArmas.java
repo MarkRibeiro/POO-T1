@@ -14,7 +14,9 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 	Celula tab[][] = new Celula[32][32];
 	Line2D.Double ln[] = new Line2D.Double[64];
 	CtrlRegras ctrl;
-	boolean b = false;
+	boolean b = false, armaNoTab = false;
+	int xArmaTab = 0, yArmaTab = 0;
+	int matrizArmaTab[][];
 
 	ConjuntoArmas hidro, sub, destroyer, cruzador, couro;
 	ArrayList<ConjuntoArmas> todasAsArmas = new ArrayList<ConjuntoArmas>();
@@ -48,12 +50,12 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 			ln[16 + i] = new Line2D.Double(xIni + larg * i, yIni, xIni + larg * i, yIni + 15 * alt);
 		}
 		
+
+		/*************************************************Construindo Armas*************************************************************/
 		for (int i = 0; i < 5; i++) { // Hidroavioes
 			hidro = new ConjuntoArmas(hidroMatriz, tamanhoQuadrado + 2, new Color(64, 85, 27, 255));
 			Movimento mv = new Movimento(hidro, this, indice);
-			hidro.setBounds((int) (xIni - deslocaX), (int) yIni, (int) (tamanhoQuadrado + 2) * 3,
-					(int) (tamanhoQuadrado + 2) * 2);
-			//this.add(hidro);
+			hidro.setBounds((int) (xIni - deslocaX), (int) yIni, (int) (tamanhoQuadrado + 2) * 3,(int) (tamanhoQuadrado + 2) * 2);
 			hidro.setLayout(null);
 			deslocaX -= 99;
 			todasAsArmas.add(hidro);
@@ -65,9 +67,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		for (int i = 0; i < 4; i++) { // Submarinos
 			sub = new ConjuntoArmas(subMatriz, tamanhoQuadrado, new Color(74, 148, 62, 255));
 			Movimento mv = new Movimento(sub, this, indice);
-			sub.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) tamanhoQuadrado,
-					(int) tamanhoQuadrado);
-			//this.add(sub);
+			sub.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) tamanhoQuadrado,(int) tamanhoQuadrado);
 			sub.setLayout(null);
 			deslocaX -= 43;
 			todasAsArmas.add(sub);
@@ -80,9 +80,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		for (int i = 0; i < 3; i++) { // Destroyer
 			destroyer = new ConjuntoArmas(desMatriz, tamanhoQuadrado + 2, new Color(255, 227, 72, 255));
 			Movimento mv = new Movimento(destroyer, this, indice);
-			destroyer.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 2) + 2,
-					(int) tamanhoQuadrado);
-			//this.add(destroyer);
+			destroyer.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 2) + 2,(int) tamanhoQuadrado);
 			destroyer.setLayout(null);
 			deslocaX -= 71;
 			todasAsArmas.add(destroyer);
@@ -95,11 +93,8 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		for (int i = 0; i < 2; i++) { // Cruzador
 			cruzador = new ConjuntoArmas(cruzaMatriz, tamanhoQuadrado + 6, new Color(255, 167, 28, 255));
 			Movimento mv = new Movimento(cruzador, this, indice);
-			cruzador.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 4) + 6,
-					(int) tamanhoQuadrado);
-			//this.add(cruzador);
+			cruzador.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 4) + 6,(int) tamanhoQuadrado);
 			cruzador.setLayout(null);
-
 			deslocaX -= 127;
 			todasAsArmas.add(cruzador);
 			indice += 1;
@@ -110,12 +105,13 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 
 		couro = new ConjuntoArmas(couroMatriz, tamanhoQuadrado + 8, new Color(155, 84, 22, 255));
 		Movimento mv = new Movimento(couro, this, indice);
-		couro.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 5) + 8,
-				(int) tamanhoQuadrado);
-		//this.add(couro);
+		couro.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 5) + 8, (int) tamanhoQuadrado);
 		couro.setLayout(null);
 		todasAsArmas.add(couro);
-
+		/*******************************************************End Construindo Armas***************************************************************/
+	
+	
+	
 	}
 
 	public void paintComponent(Graphics g) {
@@ -143,14 +139,26 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 			g2d.drawString(String.valueOf((char) (65 + i)), (int) xIni - 20, (int) (yIni + 20 + alt * i));
 		}
 
-//*************************************************Construindo Armas*************************************************************
-
+		/*******************Paint Armas*********************/
 		for (int i = 0; i < todasAsArmas.size(); i++) {
-			//System.out.println(todasAsArmas.get(i));
 			this.add(todasAsArmas.get(i));
 		}
 
-//*******************************************************End Construindo Armas***************************************************************
+		if(armaNoTab == true) {
+			for (int i = 0; i < matrizArmaTab.length; i++) {
+				for (int j = 0; j< matrizArmaTab[i].length; j++) {
+					if (matrizArmaTab[i][j] == 1) {
+						g2d.setPaint(new Color(162, 211, 87, 255));
+						rt = new Rectangle2D.Double(tab[yArmaTab][xArmaTab].x+i, tab[yArmaTab][xArmaTab].y+j, larg, alt);
+						g2d.fill(rt);
+					}
+				}
+				
+				
+				
+			}
+			armaNoTab=false;
+		}
 
 		JButton pronto = new JButton();
 		pronto.setText("Tabuleiro Pronto!");
@@ -159,9 +167,10 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		pronto.setEnabled(b);
 		this.setLayout(null);
 	}
-
+	
 	public void mouseClicked(MouseEvent e) {
 		double x = e.getX(), y = e.getY();
+		
 
 	}
 
@@ -183,7 +192,9 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
 			ctrl.jogada((int)y,(int)x);
 			System.out.printf("(%.2f, %.2f)\n", x, y);
-		}
+		
+		
+		} 
 		repaint();
 	}
 	
@@ -196,28 +207,49 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 
 	@Override
 	public void whenClicked(int posicao) {
+		
 		this.remove(todasAsArmas.get(posicao));
+		System.out.printf("%d", todasAsArmas.size());
 		repaint();
 	}
 	public static Point getPositionRelativeTo(Component root, Component comp) {
-	    if (comp.equals(root)) { return new Point(0,0); }
+	    if (comp.equals(root)) { 
+	    	return new Point(0,0); 
+	    }
 	    Point pos = comp.getLocation();
 	    Point parentOff = getPositionRelativeTo(root, comp.getParent());
 	    return new Point(pos.x + parentOff.x, pos.y + parentOff.y);
 	}
 	@Override
-	public void whenReleased(MouseEvent e) {
+	public void whenReleased(MouseEvent e, int posicao) {
 		System.out.println(SwingUtilities.convertPoint(e.getComponent(), e.getX(), e.getY(), this));
 		double x=SwingUtilities.convertPoint(e.getComponent(), e.getX(), e.getY(), this).getX(),y=SwingUtilities.convertPoint(e.getComponent(), e.getX(), e.getY(), this).getY();
 		x-=xIni;
 		y-=yIni;
-
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
+		
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
 			ctrl.jogada((int)y,(int)x);
 			System.out.printf("(%.2f, %.2f)\n", x, y);
+			System.out.printf("released arma dentro");
+			xArmaTab = (int)x;
+			yArmaTab = (int)y;
+			armaNoTab =true;
+			matrizArmaTab= todasAsArmas.get(posicao).getMatriz();
+			
+		}else {
+			this.add(todasAsArmas.get(posicao));
+			System.out.printf("released arma");
 		}
 		repaint();
+	}
+
+	@Override
+	public void whenOtherClicked(int butao, int posicao) {
+		if(butao == 3) {
+			todasAsArmas.get(posicao).viraArma();
+		}
+		
 	}
 }
