@@ -67,7 +67,7 @@ public class ConjuntoArmas extends JPanel {
 					virou = false;
 				}
 			}
-			auxMatriz = auxMatriz2;
+			this.matriz = auxMatriz2;
 		}
 		
 		this.setBounds(this.getX(), this.getY(), this.getHeight(), this.getWidth() );

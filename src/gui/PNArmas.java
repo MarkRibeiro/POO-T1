@@ -108,12 +108,27 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		couro.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 5) + 8, (int) tamanhoQuadrado);
 		couro.setLayout(null);
 		todasAsArmas.add(couro);
+		
+
+		/*******************Paint Armas*********************/
+		for (int i = 0; i < todasAsArmas.size(); i++) {
+			this.add(todasAsArmas.get(i));
+		}
+		
 		/*******************************************************End Construindo Armas***************************************************************/
-	
+
+		pronto = new JButton();
+		pronto.setText("Tabuleiro Pronto!");
+		pronto.setBounds(570, 620, 160, 30);
+		this.add(pronto);
+		pronto.setEnabled(b);
+		this.setLayout(null);
+
 	
 	
 	}
 
+	JButton pronto;
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
@@ -124,7 +139,11 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				g2d.setPaint(new Color(0, 0, 0, 0));
+				if(tab[i][j].arma!=null) {
+					g2d.setPaint(new Color(172,223,135, 255));
+				}else {
+					g2d.setPaint(new Color(0, 0, 0, 0));
+				}
 				rt = new Rectangle2D.Double(tab[i][j].x + espLinha, tab[i][j].y + espLinha, larg, alt);
 				g2d.fill(rt);
 			}
@@ -139,33 +158,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 			g2d.drawString(String.valueOf((char) (65 + i)), (int) xIni - 20, (int) (yIni + 20 + alt * i));
 		}
 
-		/*******************Paint Armas*********************/
-		for (int i = 0; i < todasAsArmas.size(); i++) {
-			this.add(todasAsArmas.get(i));
-		}
 
-		if(armaNoTab == true) {
-			for (int i = 0; i < matrizArmaTab.length; i++) {
-				for (int j = 0; j< matrizArmaTab[i].length; j++) {
-					if (matrizArmaTab[i][j] == 1) {
-						g2d.setPaint(new Color(162, 211, 87, 255));
-						rt = new Rectangle2D.Double(tab[yArmaTab][xArmaTab].x+i, tab[yArmaTab][xArmaTab].y+j, larg, alt);
-						g2d.fill(rt);
-					}
-				}
-				
-				
-				
-			}
-			armaNoTab=false;
-		}
-
-		JButton pronto = new JButton();
-		pronto.setText("Tabuleiro Pronto!");
-		pronto.setBounds(570, 620, 160, 30);
-		this.add(pronto);
-		pronto.setEnabled(b);
-		this.setLayout(null);
 	}
 	
 	public void mouseClicked(MouseEvent e) {
@@ -208,8 +201,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 	@Override
 	public void whenClicked(int posicao) {
 		
-		this.remove(todasAsArmas.get(posicao));
-		System.out.printf("%d", todasAsArmas.size());
+		//this.remove(todasAsArmas.get(posicao));
 		repaint();
 	}
 	public static Point getPositionRelativeTo(Component root, Component comp) {
@@ -228,20 +220,30 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 		y-=yIni;
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
-		
-		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			ctrl.jogada((int)y,(int)x);
-			System.out.printf("(%.2f, %.2f)\n", x, y);
-			System.out.printf("released arma dentro");
-			xArmaTab = (int)x;
-			yArmaTab = (int)y;
-			armaNoTab =true;
-			matrizArmaTab= todasAsArmas.get(posicao).getMatriz();
-			
-		}else {
-			this.add(todasAsArmas.get(posicao));
-			System.out.printf("released arma");
+		if(e.getButton() != MouseEvent.BUTTON3) {
+			if(x>=0 && y>=0 && x<=15 && y<=15) {
+				ctrl.jogada((int)y,(int)x);
+				System.out.printf("(%.2f, %.2f)\n", x, y);
+				System.out.printf("released arma dentro");
+				xArmaTab = (int)x;
+				yArmaTab = (int)y;
+				armaNoTab =true;
+				matrizArmaTab= todasAsArmas.get(posicao).getMatriz();
+				this.remove(todasAsArmas.get(posicao));
+				for (int i = 0; i < matrizArmaTab.length; i++) {
+					for (int j = 0; j< matrizArmaTab[i].length; j++) {
+						if (matrizArmaTab[i][j] == 1) {
+							tab[yArmaTab+i][xArmaTab+j].arma=todasAsArmas.get(posicao);
+						}
+					}
+				}
+				
+			}else {
+				this.add(todasAsArmas.get(posicao));
+				System.out.printf("released arma");
+			}
 		}
+		revalidate();
 		repaint();
 	}
 

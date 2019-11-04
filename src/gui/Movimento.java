@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -52,20 +53,19 @@ public class Movimento implements MouseListener, MouseMotionListener{
 	public void mousePressed(MouseEvent e) {
 		x = e.getX();
 		y = e.getY();
-		armas.whenClicked(indice);
+		armas.whenClicked(indice);//passar o x e y (divide pelo tamanho do quadrado)
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		armas.whenReleased(e, indice);
 	}
 
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		e.getComponent().setLocation((e.getX()+e.getComponent().getX())-x,(e.getY()+e.getComponent().getY())-y);
+		Component z = e.getComponent();
+		z.setLocation((e.getX()+e.getComponent().getX())-x,(e.getY()+e.getComponent().getY())-y);
 	}
 
 }
