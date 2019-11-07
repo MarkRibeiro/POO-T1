@@ -17,7 +17,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 	boolean b = false, armaNoTab = false;
 	int xArmaTab = 0, yArmaTab = 0;
 	int matrizArmaTab[][];
-
+	int contadorArmas = 0;
 	ConjuntoArmas hidro, sub, destroyer, cruzador, couro;
 	ArrayList<ConjuntoArmas> todasAsArmas = new ArrayList<ConjuntoArmas>();
 	int hidroMatriz[][] = { { 0, 1, 0 }, { 1, 0, 1 } };
@@ -200,8 +200,6 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 
 	@Override
 	public void whenClicked(int posicao) {
-		
-		//this.remove(todasAsArmas.get(posicao));
 		repaint();
 	}
 	public static Point getPositionRelativeTo(Component root, Component comp) {
@@ -224,12 +222,15 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 			if(x>=0 && y>=0 && x<=15 && y<=15) {
 				ctrl.jogada((int)y,(int)x);
 				System.out.printf("(%.2f, %.2f)\n", x, y);
-				System.out.printf("released arma dentro");
 				xArmaTab = (int)x;
 				yArmaTab = (int)y;
 				armaNoTab =true;
 				matrizArmaTab= todasAsArmas.get(posicao).getMatriz();
 				this.remove(todasAsArmas.get(posicao));
+				contadorArmas++;
+				if(contadorArmas == 15) {
+					pronto.setEnabled(true);
+				}
 				for (int i = 0; i < matrizArmaTab.length; i++) {
 					for (int j = 0; j< matrizArmaTab[i].length; j++) {
 						if (matrizArmaTab[i][j] == 1) {
@@ -240,9 +241,9 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver {
 				
 			}else {
 				this.add(todasAsArmas.get(posicao));
-				System.out.printf("released arma");
 			}
 		}
+		
 		revalidate();
 		repaint();
 	}
