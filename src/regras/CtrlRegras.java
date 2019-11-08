@@ -3,7 +3,26 @@ package regras;
 public class CtrlRegras {
 	int vez=5;
 	int jogadas = 9;
-	int tabuleiro [][]= { 
+	int prontos = 0;
+	public TrocaTabuleiros painel;
+	int tabuleiro1 [][]= { 
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+	
+	int tabuleiro2 [][]= { 
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -24,21 +43,22 @@ public class CtrlRegras {
 	}
 	
 	public int[][] getMatriz() {
-		return tabuleiro;
+		if(getVez() == 1) {
+			return tabuleiro1;
+		}else {
+			return tabuleiro2;
+		}
 	}
 	
 	public int getVez() {
 		return vez;
 	}	
 	
-	public void jogada(int linha, int coluna) {
-		if (tabuleiro[linha][coluna]==0) {
-			tabuleiro[linha][coluna]=getVez();
-			if(vez==5) {
-				vez=-1;
-			}else {
-				vez=5;
-			}
+	public void jogada(int linha, int coluna, int tipo) {
+		if(getVez() == 1) {
+			tabuleiro1[linha][coluna] = tipo;
+		}else {
+			tabuleiro2[linha][coluna] = tipo;
 		}
 	}
 	
@@ -47,16 +67,16 @@ public class CtrlRegras {
 		for(int i=0;i<3;i++) {
 			soma1 = soma2 = 0;
 			for(int j =0;j<3;j++) {
-				soma1 += tabuleiro[i][j];
-				soma2 += tabuleiro[i][j];
+				soma1 += tabuleiro1[i][j];
+				soma2 += tabuleiro1[i][j];
 			}
 			if(soma1 == 15 || soma2 == 15) return 5;
 			if(soma1 == -3 || soma2 == -3) return -1;
 		}
 		soma1 = soma2 = 0;
 		for(int i =0;i<3;i++) {
-		    soma1+= tabuleiro[i][i];
-		    soma2=+tabuleiro[i][2-i];
+		    soma1+= tabuleiro1[i][i];
+		    soma2=+tabuleiro1[i][2-i];
 		}
 		if(soma1 == 15 || soma2 == 15) return 5;
 		if(soma1 == -3 || soma2 == -3) return -1;
@@ -64,6 +84,14 @@ public class CtrlRegras {
 		return 0;
 	}
 	
-	
-	
+	public void tabuleiroPronto() {
+		prontos += 1;
+		if(prontos == 2) {
+			painel.fimPosicionamento();
+			
+		}else {
+			vez=2;
+			painel.trocaTabuleiros();
+		}
+	}
 }

@@ -105,7 +105,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			ctrl.jogada((int)y,(int)x);
+			//ctrl.jogada((int)y,(int)x);
 			System.out.printf("(%.2f, %.2f)\n", x, y);
 		}
 		repaint();

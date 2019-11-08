@@ -9,12 +9,13 @@ public class ConjuntoArmas extends JPanel {
 	private double tamanho;
 	private Color cor;
 	private int matriz[][];
+	public String tipo;
 	
-	public ConjuntoArmas(int armaMatriz[][], double tamanhoArma, Color corArma ) {
+	public ConjuntoArmas(int armaMatriz[][], double tamanhoArma, Color corArma, String tipo ) {
 		this.cor = corArma;
 		this.tamanho = tamanhoArma;
 		this.matriz = armaMatriz;
-		
+		this.tipo = tipo;
 		this.setBackground(new Color(0, 0, 0, 0));
 	}
 	
