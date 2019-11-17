@@ -9,6 +9,7 @@ import regras.*;
 public class PNBatalha extends JPanel implements MouseListener {
 	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
 	int iClick,jClick;
+	JLabel jogadorAtual;
 	Celula tab1[][]=new Celula[32][32];
 	Celula tab2[][]=new Celula[32][32];
 	Line2D.Double ln1[]=new Line2D.Double[64];
@@ -19,11 +20,15 @@ public class PNBatalha extends JPanel implements MouseListener {
 		Double x=xIni;
 		Double y=yIni;
 		ctrl=c;
-		
+		jogadorAtual = new JLabel();
+		jogadorAtual.setBounds(598, 20, 104, 15);
+		jogadorAtual.setText(ctrl.getNomeVez() + " ataca");
+		add(jogadorAtual);
+		setLayout(null);
 		for(int i=0;i<15;i++) {
 			x=xIni;
 			for(int j=0;j<15;j++) {
-				tab1[i][j]=new Celula(x,y);
+				tab2[i][j]=new Celula(x,y);
 				x+=larg+espLinha;
 			}
 			y+=alt+espLinha;
@@ -33,7 +38,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 		for(int i=0;i<15;i++) {
 			x=xIni/16;
 			for(int j=0;j<15;j++) {
-				tab2[i][j]=new Celula(x,y);
+				tab1[i][j]=new Celula(x,y);
 				x+=larg+espLinha;
 			}
 			y+=alt+espLinha;
@@ -67,7 +72,21 @@ public class PNBatalha extends JPanel implements MouseListener {
 		
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
-				g2d.setPaint(new Color(0, 0, 0, 0));
+				//System.out.print(ctrl.tabuleiro1[i][j]);
+				if(ctrl.mascaraTabuleiro1[i][j] == -1)
+					g2d.setPaint(new Color(0, 0, 255, 255));
+				else if(ctrl.mascaraTabuleiro1[i][j] == 1)
+					g2d.setPaint(new Color(64, 85, 27, 255));
+				else if(ctrl.mascaraTabuleiro1[i][j] == 2)
+					g2d.setPaint(new Color(74, 148, 62, 255));
+				else if(ctrl.mascaraTabuleiro1[i][j] == 3)
+					g2d.setPaint(new Color(255, 227, 72, 255));
+				else if(ctrl.mascaraTabuleiro1[i][j] == 4)
+					g2d.setPaint(new Color(255, 167, 28, 255));
+				else if(ctrl.mascaraTabuleiro1[i][j] == 5)
+					g2d.setPaint(new Color(155, 84, 22, 255));
+				else 
+					g2d.setPaint(new Color(0,0,0,0));
 				rt=new Rectangle2D.Double(tab1[i][j].x+espLinha,tab1[i][j].y+espLinha,larg,alt);
 				g2d.fill(rt);
 			}
@@ -75,18 +94,40 @@ public class PNBatalha extends JPanel implements MouseListener {
 		
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
-				g2d.setPaint(new Color(0, 0, 0, 0));
+				//System.out.print(ctrl.tabuleiro1[i][j]);
+				if(ctrl.mascaraTabuleiro2[i][j] == -1)
+					g2d.setPaint(new Color(0, 0, 255, 255));
+				else if(ctrl.mascaraTabuleiro2[i][j] == 1)
+					g2d.setPaint(new Color(64, 85, 27, 255));
+				else if(ctrl.mascaraTabuleiro2[i][j] == 2)
+					g2d.setPaint(new Color(74, 148, 62, 255));
+				else if(ctrl.mascaraTabuleiro2[i][j] == 3)
+					g2d.setPaint(new Color(255, 227, 72, 255));
+				else if(ctrl.mascaraTabuleiro2[i][j] == 4)
+					g2d.setPaint(new Color(255, 167, 28, 255));
+				else if(ctrl.mascaraTabuleiro2[i][j] == 5)
+					g2d.setPaint(new Color(155, 84, 22, 255));
+				else 
+					g2d.setPaint(new Color(0,0,0,0));
 				rt=new Rectangle2D.Double(tab2[i][j].x+espLinha,tab2[i][j].y+espLinha,larg,alt);
 				g2d.fill(rt);
 			}
 		}
 		
-		g2d.setPaint(Color.black);
-		
 		for(int i=0;i<32;i++) {
+			if(ctrl.getVez() == 1)
+				g2d.setPaint(Color.red);
+			else
+				g2d.setPaint(Color.black);
 			g2d.draw(ln1[i]);
+			if(ctrl.getVez() == 2)
+				g2d.setPaint(Color.red);
+			else
+				g2d.setPaint(Color.black);
 			g2d.draw(ln2[i]);
 		}
+		
+		g2d.setPaint(Color.black);
 		
 		for(int i=0;i<15;i++) {
 			g2d.drawString(String.valueOf(i+1), (int)(xIni+10+alt*i), (int)yIni-10);
@@ -99,14 +140,31 @@ public class PNBatalha extends JPanel implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 		double x=e.getX(),y=e.getY();
-		x-=xIni;
+		int numero;
+		int vez = ctrl.getVez();
+		if(x>=650) { 
+			x-=xIni;
+			numero = 2;
+		}
+		else { 
+			x-=xIni/16;
+			numero = 1;
+		}
 		y-=yIni;
 		
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			//ctrl.jogada((int)y,(int)x);
-			System.out.printf("(%.2f, %.2f)\n", x, y);
+			if(ctrl.ataque((int)y,(int)x, numero) == false)
+				SwingUtilities.getWindowAncestor(this).dispose();
+			else {
+				System.out.printf("(%.2f, %.2f) %d\n", x, y, numero);
+			}
+			int novaVez = ctrl.getVez();
+			
+			if(vez != novaVez) {
+				jogadorAtual.setText(ctrl.getNomeVez() + " ataca");
+			}
 		}
 		repaint();
 	}

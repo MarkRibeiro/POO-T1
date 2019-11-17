@@ -27,19 +27,20 @@ public class FRMain extends JFrame implements TrocaFase {
 	}
 	public void trocaFase() {
 		getContentPane().remove(fase);
-		System.out.printf("Alo Alo realengo\n");
 		getContentPane().add(new PNBatalha(c));
 		revalidate();
 		repaint();
 	}
 	
 	public void iniciarPosicionamento() {
+		fase.preparaInicioPartidas();
 		this.setVisible(true);
 	}
 	
 	public static void main(String args[]) {
-		FRMain m = new FRMain(new CtrlRegras());
-		(new FRLogin(m)).setVisible(true);
+		CtrlRegras c = new CtrlRegras();
+		FRMain m = new FRMain(c);
+		(new FRLogin(m, c)).setVisible(true);
 		
 	}
 }
