@@ -230,17 +230,17 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 				tab[i][j].arma = null;
 			}
 		}
+	}
 
+	public void atualizaInterface() {
 		for (int i = 0; i < todasAsArmas.size(); i++) {
 			this.remove(todasAsArmas.get(i));
-
 		}
 		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " posicione suas armas");
 		todasAsArmas.clear();
 		construindoArmas();
 		repaint();
 	}
-
 	public void mouseClicked(MouseEvent e) {
 		double x = e.getX(), y = e.getY();
 

@@ -36,8 +36,8 @@ public class Fachada {
 		ctrl.soltaMouse(linha, coluna, tipo);
 	}
 	
-	public boolean getAtaque(int linha, int coluna, int tab) {
-		return ctrl.ataque(linha, coluna, tab);
+	public boolean getAtaque(int linha, int coluna) {
+		return ctrl.ataque(linha, coluna);
 	}
 	
 	public void getTabuleiroPronto() {
@@ -54,5 +54,17 @@ public class Fachada {
 	
 	public int[][] getMascaraTabuleiro2() {
 		return ctrl.mascaraTabuleiro2;
+	}
+	
+	public String getCtrlNomeOponente(){
+		return ctrl.getNomeOponente();
+	}
+	
+	public int[][] getTabuleiro1(){
+		return ctrl.tabuleiro1;
+	}
+	
+	public int [][] getTabuleiro2(){
+		return ctrl.tabuleiro2;
 	}
 }

@@ -86,6 +86,14 @@ public class CtrlRegras {
 		jogadores[1] = n2;
 	}
 	
+	public String getNomeOponente(){
+		if(getVez() == 1) {
+			return jogadores[1];
+		}else {
+			return jogadores[0];
+		}
+	}
+	
 	public String getNomeVez(){
 		if(getVez() == 1) {
 			return jogadores[0];
@@ -114,28 +122,25 @@ public class CtrlRegras {
 		}
 	}
 	
-	public boolean ataque(int linha, int coluna, int tab) {
-		if(getVez()!=tab) {
-			if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0) {
-				if(tabuleiro2[linha][coluna] == 0)
-					mascaraTabuleiro2[linha][coluna] = -1;
-				else { 
-					mascaraTabuleiro2[linha][coluna] = tabuleiro2[linha][coluna];
-					pontosJ1 += tabuleiro2[linha][coluna];
-					System.out.printf("pontosJ1: %d\n", pontosJ1);
-				}
-				vez = 2;
-			} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0) {
-				if(tabuleiro1[linha][coluna] == 0)
-					mascaraTabuleiro1[linha][coluna] = -1;
-				else {
-					mascaraTabuleiro1[linha][coluna] = tabuleiro1[linha][coluna];
-					pontosJ2 += tabuleiro1[linha][coluna];
-					System.out.printf("pontosJ2: %d\n", pontosJ2);
-				}
-				vez = 1;
+	public boolean ataque(int linha, int coluna) {
+		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0) {
+			if(tabuleiro2[linha][coluna] == 0)
+				mascaraTabuleiro2[linha][coluna] = -1;
+			else { 
+				mascaraTabuleiro2[linha][coluna] = tabuleiro2[linha][coluna];
+				pontosJ1 += tabuleiro2[linha][coluna];
+				System.out.printf("pontosJ1: %d\n", pontosJ1);
 			}
-			
+			vez = 2;
+		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0) {
+			if(tabuleiro1[linha][coluna] == 0)
+				mascaraTabuleiro1[linha][coluna] = -1;
+			else {
+				mascaraTabuleiro1[linha][coluna] = tabuleiro1[linha][coluna];
+				pontosJ2 += tabuleiro1[linha][coluna];
+				System.out.printf("pontosJ2: %d\n", pontosJ2);
+			}
+			vez = 1;
 		}
 		return quemGanhou();
 	}
@@ -157,12 +162,14 @@ public class CtrlRegras {
 	public void tabuleiroPronto() {
 		prontos += 1;
 		if(prontos == 2) {
+			painel.trocaTabuleiros();
 			vez = 1;
-			painel.trocaTabuleiros();
 			painel.fimPosicionamento();
+			painel.atualizaInterface();
 		}else {
-			vez=2;
 			painel.trocaTabuleiros();
+			vez=2;
+			painel.atualizaInterface();
 		}
 	}
 }

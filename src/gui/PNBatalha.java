@@ -9,7 +9,7 @@ import regras.*;
 public class PNBatalha extends JPanel implements MouseListener {
 	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
 	int iClick,jClick;
-	JLabel jogadorAtual;
+	JLabel jogadorAtual, adversarioAtual;
 	Celula tab1[][]=new Celula[32][32];
 	Celula tab2[][]=new Celula[32][32];
 	Line2D.Double ln1[]=new Line2D.Double[64];
@@ -21,9 +21,13 @@ public class PNBatalha extends JPanel implements MouseListener {
 		Double y=yIni;
 		ctrl=c;
 		jogadorAtual = new JLabel();
-		jogadorAtual.setBounds(598, 20, 104, 15);
-		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " ataca");
+		adversarioAtual = new JLabel();
+		jogadorAtual.setBounds(50, 20, 450, 15);
+		adversarioAtual.setBounds(800, 20, 450, 15);
+		jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
+		adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
 		add(jogadorAtual);
+		add(adversarioAtual);
 		setLayout(null);
 		for(int i=0;i<15;i++) {
 			x=xIni;
@@ -58,6 +62,10 @@ public class PNBatalha extends JPanel implements MouseListener {
 
 	}
 	
+	public void preparaInicioPartidas() {
+		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " posicione suas armas");
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D) g;
@@ -71,21 +79,33 @@ public class PNBatalha extends JPanel implements MouseListener {
                 BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER,
                 10.0f));
-		
+		int[][] conteudoTab1 = null;
+		int[][] conteudoTab2 = null;
+		int[][] masc = null;
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
+				System.out.println(ctrl.getCtrlVez());
+				if (ctrl.getCtrlVez() == 1) {
+					conteudoTab1 = ctrl.getTabuleiro1();
+					masc = mascaraTabuleiro1;
+				} else {
+					conteudoTab1 = ctrl.getTabuleiro2();
+					masc = mascaraTabuleiro2;
+				}
 				//System.out.print(ctrl.tabuleiro1[i][j]);
-				if(mascaraTabuleiro1[i][j] == -1)
+				if(masc[i][j] == -1)
 					g2d.setPaint(new Color(0, 0, 255, 255));
-				else if(mascaraTabuleiro1[i][j] == 1)
+				else if (masc[i][j] > 0)
+					g2d.setPaint(new Color(255, 0, 0, 255));
+				else if(conteudoTab1[i][j] == 1)
 					g2d.setPaint(new Color(64, 85, 27, 255));
-				else if(mascaraTabuleiro1[i][j] == 2)
+				else if(conteudoTab1[i][j] == 2)
 					g2d.setPaint(new Color(74, 148, 62, 255));
-				else if(mascaraTabuleiro1[i][j] == 3)
+				else if(conteudoTab1[i][j] == 3)
 					g2d.setPaint(new Color(255, 227, 72, 255));
-				else if(mascaraTabuleiro1[i][j] == 4)
+				else if(conteudoTab1[i][j] == 4)
 					g2d.setPaint(new Color(255, 167, 28, 255));
-				else if(mascaraTabuleiro1[i][j] == 5)
+				else if(conteudoTab1[i][j] == 5)
 					g2d.setPaint(new Color(155, 84, 22, 255));
 				else 
 					g2d.setPaint(new Color(0,0,0,0));
@@ -96,18 +116,23 @@ public class PNBatalha extends JPanel implements MouseListener {
 		
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
+				if (ctrl.getCtrlVez() == 2) {
+					conteudoTab2 = mascaraTabuleiro1;
+				} else {
+					conteudoTab2 = mascaraTabuleiro2;
+				}
 				//System.out.print(ctrl.tabuleiro1[i][j]);
-				if(mascaraTabuleiro2[i][j] == -1)
+				if(conteudoTab2[i][j] == -1)
 					g2d.setPaint(new Color(0, 0, 255, 255));
-				else if(mascaraTabuleiro2[i][j] == 1)
+				else if(conteudoTab2[i][j] == 1)
 					g2d.setPaint(new Color(64, 85, 27, 255));
-				else if(mascaraTabuleiro2[i][j] == 2)
+				else if(conteudoTab2[i][j] == 2)
 					g2d.setPaint(new Color(74, 148, 62, 255));
-				else if(mascaraTabuleiro2[i][j] == 3)
+				else if(conteudoTab2[i][j] == 3)
 					g2d.setPaint(new Color(255, 227, 72, 255));
-				else if(mascaraTabuleiro2[i][j] == 4)
+				else if(conteudoTab2[i][j] == 4)
 					g2d.setPaint(new Color(255, 167, 28, 255));
-				else if(mascaraTabuleiro2[i][j] == 5)
+				else if(conteudoTab2[i][j] == 5)
 					g2d.setPaint(new Color(155, 84, 22, 255));
 				else 
 					g2d.setPaint(new Color(0,0,0,0));
@@ -117,15 +142,9 @@ public class PNBatalha extends JPanel implements MouseListener {
 		}
 		
 		for(int i=0;i<32;i++) {
-			if(ctrl.getCtrlVez() == 1)
-				g2d.setPaint(Color.red);
-			else
-				g2d.setPaint(Color.black);
+			g2d.setPaint(Color.red);
 			g2d.draw(ln1[i]);
-			if(ctrl.getCtrlVez() == 2)
-				g2d.setPaint(Color.red);
-			else
-				g2d.setPaint(Color.black);
+			g2d.setPaint(Color.black);
 			g2d.draw(ln2[i]);
 		}
 		
@@ -142,30 +161,23 @@ public class PNBatalha extends JPanel implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 		double x=e.getX(),y=e.getY();
-		int numero;
 		int vez = ctrl.getCtrlVez();
-		if(x>=650) { 
-			x-=xIni;
-			numero = 2;
-		}
-		else { 
-			x-=xIni/16;
-			numero = 1;
-		}
+		x-=xIni;
 		y-=yIni;
 		
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			if(ctrl.getAtaque((int)y,(int)x, numero) == false)
+			if(ctrl.getAtaque((int)y,(int)x) == false)
 				SwingUtilities.getWindowAncestor(this).dispose();
 			else {
-				System.out.printf("(%.2f, %.2f) %d\n", x, y, numero);
+				System.out.printf("(%.2f, %.2f)\n", x, y);
 			}
 			int novaVez = ctrl.getCtrlVez();
 			
 			if(vez != novaVez) {
-				jogadorAtual.setText(ctrl.getCtrlNomeVez() + " ataca");
+				jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
+				adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
 			}
 		}
 		repaint();
