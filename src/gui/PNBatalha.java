@@ -14,15 +14,15 @@ public class PNBatalha extends JPanel implements MouseListener {
 	Celula tab2[][]=new Celula[32][32];
 	Line2D.Double ln1[]=new Line2D.Double[64];
 	Line2D.Double ln2[]=new Line2D.Double[64];
-	CtrlRegras ctrl;
+	Fachada ctrl;
 	
-	public PNBatalha(CtrlRegras c) {
+	public PNBatalha(Fachada c) {
 		Double x=xIni;
 		Double y=yIni;
 		ctrl=c;
 		jogadorAtual = new JLabel();
 		jogadorAtual.setBounds(598, 20, 104, 15);
-		jogadorAtual.setText(ctrl.getNomeVez() + " ataca");
+		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " ataca");
 		add(jogadorAtual);
 		setLayout(null);
 		for(int i=0;i<15;i++) {
@@ -62,8 +62,10 @@ public class PNBatalha extends JPanel implements MouseListener {
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D) g;
 		Rectangle2D rt;
-		int mat[][]=ctrl.getMatriz();
-		int vez=ctrl.getVez();
+		int mat[][]=ctrl.getCtrlMatriz();
+		int vez=ctrl.getCtrlVez();
+		int mascaraTabuleiro1[][] = ctrl.getMascaraTabuleiro1();
+		int mascaraTabuleiro2[][] = ctrl.getMascaraTabuleiro2();
 		
 		g2d.setStroke(new BasicStroke(2.0f,
                 BasicStroke.CAP_BUTT,
@@ -73,17 +75,17 @@ public class PNBatalha extends JPanel implements MouseListener {
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
 				//System.out.print(ctrl.tabuleiro1[i][j]);
-				if(ctrl.mascaraTabuleiro1[i][j] == -1)
+				if(mascaraTabuleiro1[i][j] == -1)
 					g2d.setPaint(new Color(0, 0, 255, 255));
-				else if(ctrl.mascaraTabuleiro1[i][j] == 1)
+				else if(mascaraTabuleiro1[i][j] == 1)
 					g2d.setPaint(new Color(64, 85, 27, 255));
-				else if(ctrl.mascaraTabuleiro1[i][j] == 2)
+				else if(mascaraTabuleiro1[i][j] == 2)
 					g2d.setPaint(new Color(74, 148, 62, 255));
-				else if(ctrl.mascaraTabuleiro1[i][j] == 3)
+				else if(mascaraTabuleiro1[i][j] == 3)
 					g2d.setPaint(new Color(255, 227, 72, 255));
-				else if(ctrl.mascaraTabuleiro1[i][j] == 4)
+				else if(mascaraTabuleiro1[i][j] == 4)
 					g2d.setPaint(new Color(255, 167, 28, 255));
-				else if(ctrl.mascaraTabuleiro1[i][j] == 5)
+				else if(mascaraTabuleiro1[i][j] == 5)
 					g2d.setPaint(new Color(155, 84, 22, 255));
 				else 
 					g2d.setPaint(new Color(0,0,0,0));
@@ -95,17 +97,17 @@ public class PNBatalha extends JPanel implements MouseListener {
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
 				//System.out.print(ctrl.tabuleiro1[i][j]);
-				if(ctrl.mascaraTabuleiro2[i][j] == -1)
+				if(mascaraTabuleiro2[i][j] == -1)
 					g2d.setPaint(new Color(0, 0, 255, 255));
-				else if(ctrl.mascaraTabuleiro2[i][j] == 1)
+				else if(mascaraTabuleiro2[i][j] == 1)
 					g2d.setPaint(new Color(64, 85, 27, 255));
-				else if(ctrl.mascaraTabuleiro2[i][j] == 2)
+				else if(mascaraTabuleiro2[i][j] == 2)
 					g2d.setPaint(new Color(74, 148, 62, 255));
-				else if(ctrl.mascaraTabuleiro2[i][j] == 3)
+				else if(mascaraTabuleiro2[i][j] == 3)
 					g2d.setPaint(new Color(255, 227, 72, 255));
-				else if(ctrl.mascaraTabuleiro2[i][j] == 4)
+				else if(mascaraTabuleiro2[i][j] == 4)
 					g2d.setPaint(new Color(255, 167, 28, 255));
-				else if(ctrl.mascaraTabuleiro2[i][j] == 5)
+				else if(mascaraTabuleiro2[i][j] == 5)
 					g2d.setPaint(new Color(155, 84, 22, 255));
 				else 
 					g2d.setPaint(new Color(0,0,0,0));
@@ -115,12 +117,12 @@ public class PNBatalha extends JPanel implements MouseListener {
 		}
 		
 		for(int i=0;i<32;i++) {
-			if(ctrl.getVez() == 1)
+			if(ctrl.getCtrlVez() == 1)
 				g2d.setPaint(Color.red);
 			else
 				g2d.setPaint(Color.black);
 			g2d.draw(ln1[i]);
-			if(ctrl.getVez() == 2)
+			if(ctrl.getCtrlVez() == 2)
 				g2d.setPaint(Color.red);
 			else
 				g2d.setPaint(Color.black);
@@ -141,7 +143,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		double x=e.getX(),y=e.getY();
 		int numero;
-		int vez = ctrl.getVez();
+		int vez = ctrl.getCtrlVez();
 		if(x>=650) { 
 			x-=xIni;
 			numero = 2;
@@ -155,15 +157,15 @@ public class PNBatalha extends JPanel implements MouseListener {
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			if(ctrl.ataque((int)y,(int)x, numero) == false)
+			if(ctrl.getAtaque((int)y,(int)x, numero) == false)
 				SwingUtilities.getWindowAncestor(this).dispose();
 			else {
 				System.out.printf("(%.2f, %.2f) %d\n", x, y, numero);
 			}
-			int novaVez = ctrl.getVez();
+			int novaVez = ctrl.getCtrlVez();
 			
 			if(vez != novaVez) {
-				jogadorAtual.setText(ctrl.getNomeVez() + " ataca");
+				jogadorAtual.setText(ctrl.getCtrlNomeVez() + " ataca");
 			}
 		}
 		repaint();

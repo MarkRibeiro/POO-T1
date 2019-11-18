@@ -12,7 +12,7 @@ public class FRLogin extends JFrame{
 	final int ALT_WINDOW=400;
 
 	
-	public FRLogin(FRMain m, CtrlRegras ctrl) {
+	public FRLogin(FRMain m, Fachada ctrl) {
 		JButton comecar = new JButton();
 		JTextField jogador1 = new JTextField();
 		JTextField jogador2 = new JTextField();
@@ -44,7 +44,7 @@ public class FRLogin extends JFrame{
 		comecar.setBounds(200, yIni + yDist*2, 100, 40);
 		comecar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrl.importaNomes(jogador1.getText(), jogador2.getText());
+				ctrl.getImportaNomes(jogador1.getText(), jogador2.getText());
 				dispose();
 				m.iniciarPosicionamento();
 			}

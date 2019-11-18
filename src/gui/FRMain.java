@@ -8,12 +8,12 @@ import javax.swing.*;
 public class FRMain extends JFrame implements TrocaFase {
 	final int LARG_WINDOW=1300;
 	final int ALT_WINDOW=700;
-	CtrlRegras c;
+	Fachada c; 
 	PNArmas fase;
 	
-	public FRMain(CtrlRegras c) {
+	public FRMain(Fachada c) {
 		this.c = c;
-		fase = new PNArmas(c, this);
+		fase = new PNArmas(c, this); 
 		Toolkit tk=Toolkit.getDefaultToolkit();
 		Dimension screenSize=tk.getScreenSize();
 		int sl=screenSize.width;
@@ -38,7 +38,7 @@ public class FRMain extends JFrame implements TrocaFase {
 	}
 	
 	public static void main(String args[]) {
-		CtrlRegras c = new CtrlRegras();
+		Fachada c = Fachada.getFachada();
 		FRMain m = new FRMain(c);
 		(new FRLogin(m, c)).setVisible(true);
 		

@@ -14,7 +14,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	int iClick, jClick;
 	Celula tab[][] = new Celula[32][32];
 	Line2D.Double ln[] = new Line2D.Double[64];
-	CtrlRegras ctrl;
+	Fachada ctrl;
 	boolean armaNoTab = false;
 	int xArmaTab = 0, yArmaTab = 0;
 	int matrizArmaTab[][];
@@ -28,10 +28,10 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	int couroMatriz[][] = { { 1, 1, 1, 1, 1 } };
 	TrocaFase t;
 	
-	public PNArmas(CtrlRegras c, TrocaFase t) {
+	public PNArmas(Fachada c, TrocaFase t) {
 		double x = xIni, y = yIni; 
 		ctrl = c;
-		ctrl.painel = this;
+		ctrl.getPainel(this);
 		this.t = t;
 		jogadorAtual = new JLabel();
 		jogadorAtual.setBounds(545, 20, 210, 15);
@@ -64,7 +64,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctrl.tabuleiroPronto();
+				ctrl.getTabuleiroPronto();
 				//TODO: Descomentar a linha a baixo
 				//pronto.setEnabled(false);
 				contadorArmas = 0;
@@ -75,7 +75,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	}
 
 	public void preparaInicioPartidas() {
-		jogadorAtual.setText(ctrl.getNomeVez() + " posicione suas armas");
+		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " posicione suas armas");
 	}
 	/*************************************************
 	 * Construindo Armas
@@ -163,8 +163,8 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		Rectangle2D rt;
-		int mat[][] = ctrl.getMatriz();
-		int vez = ctrl.getVez();
+		int mat[][] = ctrl.getCtrlMatriz();
+		int vez = ctrl.getCtrlVez();
 		g2d.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f));
 
 		for (int i = 0; i < 15; i++) {
@@ -201,27 +201,27 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 				if (tab[i][j].arma != null) {
 					switch (tab[i][j].arma.tipo) {
 					case "Hidroaviao": {
-						ctrl.soltaMouse(i, j, 1);
+						ctrl.getSoltaMouse(i, j, 1);
 						break;
 					}
 
 					case "Submarino": {
-						ctrl.soltaMouse(i, j, 2);
+						ctrl.getSoltaMouse(i, j, 2);
 						break;
 					}
 
 					case "Destroyer": {
-						ctrl.soltaMouse(i, j, 3);
+						ctrl.getSoltaMouse(i, j, 3);
 						break;
 					}
 
 					case "Cruzador": {
-						ctrl.soltaMouse(i, j, 4);
+						ctrl.getSoltaMouse(i, j, 4);
 						break;
 					}
 
 					case "Couro": {
-						ctrl.soltaMouse(i, j, 5);
+						ctrl.getSoltaMouse(i, j, 5);
 						break;
 					}
 
@@ -235,7 +235,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 			this.remove(todasAsArmas.get(i));
 
 		}
-		jogadorAtual.setText(ctrl.getNomeVez() + " posicione suas armas");
+		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " posicione suas armas");
 		todasAsArmas.clear();
 		construindoArmas();
 		repaint();
