@@ -29,6 +29,10 @@ public class PNBatalha extends JPanel implements MouseListener {
 		adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
 		add(jogadorAtual);
 		add(adversarioAtual);
+		JButton salvar = new JButton();
+		salvar.setText("Salvar Jogo");
+		salvar.setBounds(50, 590, 120, 30);
+		add(salvar);
 		setLayout(null);
 		for(int i=0;i<15;i++) {
 			x=xIni;
@@ -62,7 +66,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 		}
 		passarVez.setEnabled(false);
 		passarVez.setText("Passar Vez");
-		passarVez.setBounds(600, 600, 100, 40);
+		passarVez.setBounds(600, 590, 100, 30);
 		passarVez.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				passarVez.setEnabled(false);
@@ -99,7 +103,6 @@ public class PNBatalha extends JPanel implements MouseListener {
 		int[][] masc = null;
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
-				System.out.println(ctrl.getCtrlVez());
 				if (ctrl.getCtrlVez() == 1) {
 					conteudoTab1 = ctrl.getTabuleiro1();
 					masc = mascaraTabuleiro1;
@@ -182,9 +185,14 @@ public class PNBatalha extends JPanel implements MouseListener {
 		x = Math.floor(x/larg);
 		y = Math.floor(y/alt);
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
-			if(ctrl.getAtaque((int)y,(int)x) == false)
+			if(ctrl.getAtaque((int)y,(int)x) == false) {
+
+				FRGanhador g = new FRGanhador(ctrl.getCtrlNomeVez());
+				g.setBackground(Color.red);
+				g.setVisible(true);
 				SwingUtilities.getWindowAncestor(this).dispose();
-			else {
+			}
+			else if(ctrl.fimDeVez() == true){
 				System.out.printf("(%.2f, %.2f)\n", x, y);
 				passarVez.setEnabled(true);
 			}

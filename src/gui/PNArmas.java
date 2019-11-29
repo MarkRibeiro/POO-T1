@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.awt.event.*;
 import regras.*;
 
-public class PNArmas extends JPanel implements MouseListener, ArmasObserver, TrocaTabuleiros {
+public class PNArmas extends JPanel implements MouseListener, ArmasObserver, TrocaTabuleiros, KeyListener {
 	double xIni = 800.0, yIni = 100.0, larg = 30, alt = 30, espLinha = 0.0;
 	JLabel jogadorAtual;
 	double tamanhoQuadrado = 28;
@@ -18,6 +18,8 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	boolean armaNoTab = false;
 	int xArmaTab = 0, yArmaTab = 0;
 	int matrizArmaTab[][];
+	int matrizTemporaria[][] = new int[15][15];
+	int indexArmaSelecionada = -1;
 	int contadorArmas = 0;
 	Arma arma;
 	ConjuntoArmas pintarArma;
@@ -36,19 +38,22 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		this.t = t;
 		jogadorAtual = new JLabel();
 		jogadorAtual.setBounds(545, 20, 210, 15);
-
+		
 		add(jogadorAtual);
 
 		for (int i = 0; i < 15; i++) {
 			x = xIni;
 			for (int j = 0; j < 15; j++) {
 				tab[i][j] = new Celula(x, y);
+				matrizTemporaria[i][j] = 0;
 				x += larg + espLinha;
 			}
 			y += alt + espLinha;
 		}
 
 		addMouseListener(this);
+		addKeyListener(this);
+		setFocusable(true);
 
 		for (int i = 0; i < 16; i++) {
 			ln[i] = new Line2D.Double(xIni, yIni + alt * i, xIni + 15 * larg, yIni + alt * i);
@@ -57,7 +62,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		construindoArmas();
 		pronto = new JButton();
 		pronto.setText("Tabuleiro Pronto!");
-		pronto.setBounds(570, 620, 160, 30);
+		pronto.setBounds(570, 590, 160, 30);
 		this.add(pronto);
 		//TODO: mudar de true para false
 		pronto.setEnabled(true);
@@ -91,7 +96,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 			System.out.printf(">%s<\n", arma.toString());
 			pintarArma = new ConjuntoArmas(arma);
 			System.out.printf("sdgsdfgsdfgsdf\n");
-			Movimento mv = new Movimento(pintarArma, this, indice);
+			Movimento mv = new Movimento(pintarArma, this, (int)tamanhoQuadrado, indice);
 			pintarArma.setBounds((int) (xIni - deslocaX), (int) yIni, (int) (tamanhoQuadrado + 2) * 3,
 					(int) (tamanhoQuadrado + 2) * 2);
 			pintarArma.setLayout(null);
@@ -105,7 +110,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		for (int i = 0; i < 4; i++) { // Submarinos
 			arma = new Arma(subMatriz, tamanhoQuadrado, "Submarino");
 			pintarArma = new ConjuntoArmas(arma);
-			Movimento mv = new Movimento(pintarArma, this, indice);
+			Movimento mv = new Movimento(pintarArma, this, (int)tamanhoQuadrado, indice);
 			pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) tamanhoQuadrado,
 					(int) tamanhoQuadrado);
 			pintarArma.setLayout(null);
@@ -120,7 +125,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		for (int i = 0; i < 3; i++) { // Destroyer
 			arma = new Arma(desMatriz, tamanhoQuadrado + 2, "Destroyer");
 			pintarArma = new ConjuntoArmas(arma);
-			Movimento mv = new Movimento(pintarArma, this, indice);
+			Movimento mv = new Movimento(pintarArma, this, (int)tamanhoQuadrado, indice);
 			pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 2) + 2,
 					(int) tamanhoQuadrado);
 			pintarArma.setLayout(null);
@@ -135,7 +140,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		for (int i = 0; i < 2; i++) { // Cruzador
 			arma = new Arma(cruzaMatriz, tamanhoQuadrado + 6,  "Cruzador");
 			pintarArma = new ConjuntoArmas(arma);
-			Movimento mv = new Movimento(pintarArma, this, indice);
+			Movimento mv = new Movimento(pintarArma, this, (int)tamanhoQuadrado, indice);
 			pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 4) + 6,
 					(int) tamanhoQuadrado);
 			pintarArma.setLayout(null);
@@ -149,7 +154,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 
 		arma = new Arma(couroMatriz, tamanhoQuadrado + 8, "Couro");
 		pintarArma = new ConjuntoArmas(arma);
-		Movimento mv = new Movimento(pintarArma, this, indice);
+		Movimento mv = new Movimento(pintarArma, this, (int)tamanhoQuadrado, indice);
 		pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 5) + 8,
 				(int) tamanhoQuadrado);
 		pintarArma.setLayout(null);
@@ -311,15 +316,39 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 				yArmaTab = (int) y;
 				armaNoTab = true;
 				matrizArmaTab = todasAsArmas.get(posicao).getArma().getMatriz();
-				this.remove(todasAsArmas.get(posicao));
 				contadorArmas++;
+				indexArmaSelecionada = posicao;
 				if (contadorArmas == 15) {
 					pronto.setEnabled(true);
 				}
-				for (int i = 0; i < matrizArmaTab.length; i++) {
+
+				for (int i = 0; i < 15; i++) {
+					for (int j = 0; j < 15; j++) {
+						matrizTemporaria[i][j] = 0;
+					}
+				}
+				
+				boolean conflito = false;
+				t: for (int i = 0; i < matrizArmaTab.length; i++) {
 					for (int j = 0; j < matrizArmaTab[i].length; j++) {
 						if (matrizArmaTab[i][j] == 1) {
-							tab[yArmaTab + i][xArmaTab + j].arma = todasAsArmas.get(posicao).getArma();
+							System.out.printf("Testando (%d, %d)\n", xArmaTab + j, yArmaTab + i);
+							if (ctrl.checarQuadrado(xArmaTab + j, yArmaTab + i) == false) {
+								conflito = true;
+								break t;
+							}
+						}
+					}
+				}
+				if (conflito == false) {
+					for (int i = 0; i < matrizArmaTab.length; i++) {
+						for (int j = 0; j < matrizArmaTab[i].length; j++) {
+							if (matrizArmaTab[i][j] == 1) {
+								tab[yArmaTab + i][xArmaTab + j].arma = todasAsArmas.get(posicao).getArma();
+								ctrl.getSoltaMouse(yArmaTab + i, xArmaTab + j, 1);
+								matrizTemporaria[yArmaTab + i][xArmaTab + j] = 1;
+								this.remove(todasAsArmas.get(posicao));
+							}
 						}
 					}
 				}
@@ -339,5 +368,34 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 			todasAsArmas.get(posicao).viraArma();
 		}
 
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	void cancelarNavio() {
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if (matrizTemporaria[i][j] != 0) {
+					add(todasAsArmas.get(indexArmaSelecionada));
+					tab[i][j].arma = null;
+					ctrl.getSoltaMouse(i, j, 0);
+					matrizTemporaria[i][j] = 0;
+				}
+			}
+		}
+		repaint();
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			cancelarNavio();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 	}
 }

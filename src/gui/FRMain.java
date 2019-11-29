@@ -40,7 +40,7 @@ public class FRMain extends JFrame implements TrocaFase {
 	public static void main(String args[]) {
 		Fachada c = Fachada.getFachada();
 		FRMain m = new FRMain(c);
-		(new FRLogin(m, c)).setVisible(true);
+		(new FRInicio(m, c)).setVisible(true);
 		
 	}
 }

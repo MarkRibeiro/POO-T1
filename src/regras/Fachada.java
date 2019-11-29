@@ -71,4 +71,11 @@ public class Fachada {
 	public void passaVez() {
 		ctrl.passaVez();
 	}
+	
+	public boolean fimDeVez() {
+		return ctrl.fimDeVez();
+	}
+	public boolean checarQuadrado(int x, int y) {
+		return ctrl.checarQuadrado(x, y);
+	}
 }

@@ -7,17 +7,20 @@ public class FRGanhador extends JFrame{
 	final int ALT_WINDOW=400;
 	
 	public FRGanhador(String ganhador) {
-		JLabel l1 = new JLabel();
 		
 		setTitle("Vencedor");
 		setSize(LARG_WINDOW,ALT_WINDOW);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		getContentPane().add(new PNGanhador("sdjkhfsdjk"));
+		
+
+		JLabel l1 = new JLabel();
 		
 		l1.setText(ganhador + " Ganhou!!!");
 
 		l1.setBounds(160, 200,180, 15);
-		getContentPane().add(l1);
-
+		add(l1);		
 		setLayout(null);
 	}
 }

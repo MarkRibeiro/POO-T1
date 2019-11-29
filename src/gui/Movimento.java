@@ -12,10 +12,12 @@ public class Movimento implements MouseListener, MouseMotionListener{
 	private int x, y;
 	private PNArmas armas;
 	int indice;
+	int tamQuadrado;
 	
-	public Movimento(JPanel panel, PNArmas armas, int indice) {
+	public Movimento(JPanel panel, PNArmas armas, int tamanhoQuadrado, int indice) {
 		this.armas = armas;
-		this.indice = indice; 
+		this.indice = indice;
+		this.tamQuadrado = tamanhoQuadrado;
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
 	}
@@ -34,7 +36,6 @@ public class Movimento implements MouseListener, MouseMotionListener{
 		}else if(e.getButton() == MouseEvent.BUTTON2) {
 			armas.whenOtherClicked(2,indice);
 		}
-		
 	}
 
 	@Override
@@ -51,17 +52,19 @@ public class Movimento implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		x = e.getX();
-		y = e.getY();
+		x = e.getX()/tamQuadrado;
+		y = e.getY()/tamQuadrado;
 		armas.whenClicked(indice);//passar o x e y (divide pelo tamanho do quadrado)
+		offsetX = e.getX();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		armas.whenReleased(e, indice);
+		offsetX = 0;
 	}
 
-
+	int offsetX = 0;
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		Component z = e.getComponent();

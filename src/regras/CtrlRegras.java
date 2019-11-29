@@ -8,7 +8,7 @@ public class CtrlRegras {
 	int prontos = 0;
 	int pontosJ1 = 0;
 	int pontosJ2 = 0;
-	boolean jaJogou = false;
+	int jogadasNaRodada = 0;
 	public TrocaTabuleiros painel;
 	String jogadores[] = new String[2]; 
 	public int tabuleiro1 [][]= { 
@@ -106,7 +106,7 @@ public class CtrlRegras {
 	public int[][] getMatriz() {
 		if(getVez() == 1) {
 			return tabuleiro1;
-		}else {
+		} else {
 			return tabuleiro2;
 		}
 	}
@@ -123,8 +123,25 @@ public class CtrlRegras {
 		}
 	}
 	
+	boolean checarQuadrado(int x, int y) {
+		if ((x < 0 || x >= 15) || (y < 0 || y >= 15)) {
+			return false;
+		}
+		for (int xoff = -1; xoff <= 1; xoff++) {
+			for (int yoff = -1; yoff <= 1; yoff++) {
+				int xf = x + xoff;
+				int yf = y + yoff;
+				if ((xf < 0 || xf >= 15) || (yf < 0 || yf >= 15)) {
+					continue;
+				}
+				if (getMatriz()[yf][xf] != 0) return false;
+			}
+		}
+		return true;
+	}
+	
 	public boolean ataque(int linha, int coluna) {
-		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0 && jaJogou == false) {
+		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0 && jogadasNaRodada < 3) {
 			if(tabuleiro2[linha][coluna] == 0)
 				mascaraTabuleiro2[linha][coluna] = -1;
 			else { 
@@ -132,8 +149,8 @@ public class CtrlRegras {
 				pontosJ1 += tabuleiro2[linha][coluna];
 				System.out.printf("pontosJ1: %d\n", pontosJ1);
 			}
-			jaJogou = true;
-		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jaJogou == false) {
+			jogadasNaRodada += 1;
+		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jogadasNaRodada < 3) {
 			if(tabuleiro1[linha][coluna] == 0)
 				mascaraTabuleiro1[linha][coluna] = -1;
 			else {
@@ -141,7 +158,7 @@ public class CtrlRegras {
 				pontosJ2 += tabuleiro1[linha][coluna];
 				System.out.printf("pontosJ2: %d\n", pontosJ2);
 			}
-			jaJogou = true;
+			jogadasNaRodada += 1;
 		}
 		return quemGanhou();
 	}
@@ -149,12 +166,8 @@ public class CtrlRegras {
 	boolean quemGanhou() {
 		// TODO: Mudar de 10 para 98
 		if(pontosJ1 == 10) {
-			FRGanhador g = new FRGanhador(jogadores[0]);
-			g.setVisible(true);
 			return false;
 		} else if(pontosJ2 == 10) {
-			FRGanhador g = new FRGanhador(jogadores[1]);
-			g.setVisible(true);
 			return false;
 		}
 		return true;
@@ -178,9 +191,16 @@ public class CtrlRegras {
 		if(getVez() == 1)
 			vez = 2;
 		else if(getVez() == 2)
-			vez =1;
+			vez = 1;
 		
-		jaJogou = false;
+		jogadasNaRodada = 0;
+	}
+	
+	public boolean fimDeVez() {
+		if(jogadasNaRodada == 3)
+			return true;
+		else
+			return false;
 	}
 	
 }
