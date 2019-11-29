@@ -19,7 +19,8 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	int xArmaTab = 0, yArmaTab = 0;
 	int matrizArmaTab[][];
 	int contadorArmas = 0;
-	ConjuntoArmas hidro, sub, destroyer, cruzador, couro;
+	Arma arma;
+	ConjuntoArmas pintarArma;
 	ArrayList<ConjuntoArmas> todasAsArmas = new ArrayList<ConjuntoArmas>();
 	int hidroMatriz[][] = { { 0, 1, 0 }, { 1, 0, 1 } };
 	int subMatriz[][] = { { 1, } };
@@ -86,26 +87,30 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		int indice = 0;
 
 		for (int i = 0; i < 5; i++) { // Hidroavioes
-			hidro = new ConjuntoArmas(hidroMatriz, tamanhoQuadrado + 2, new Color(64, 85, 27, 255), "Hidroaviao");
-			Movimento mv = new Movimento(hidro, this, indice);
-			hidro.setBounds((int) (xIni - deslocaX), (int) yIni, (int) (tamanhoQuadrado + 2) * 3,
+			arma = new Arma(hidroMatriz, tamanhoQuadrado + 2, "Hidroaviao");
+			System.out.printf(">%s<\n", arma.toString());
+			pintarArma = new ConjuntoArmas(arma);
+			System.out.printf("sdgsdfgsdfgsdf\n");
+			Movimento mv = new Movimento(pintarArma, this, indice);
+			pintarArma.setBounds((int) (xIni - deslocaX), (int) yIni, (int) (tamanhoQuadrado + 2) * 3,
 					(int) (tamanhoQuadrado + 2) * 2);
-			hidro.setLayout(null);
+			pintarArma.setLayout(null);
 			deslocaX -= 99;
-			todasAsArmas.add(hidro);
+			todasAsArmas.add(pintarArma);
 			indice += 1;
 		}
 
 		deslocaX = 750;
 
 		for (int i = 0; i < 4; i++) { // Submarinos
-			sub = new ConjuntoArmas(subMatriz, tamanhoQuadrado, new Color(74, 148, 62, 255), "Submarino");
-			Movimento mv = new Movimento(sub, this, indice);
-			sub.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) tamanhoQuadrado,
+			arma = new Arma(subMatriz, tamanhoQuadrado, "Submarino");
+			pintarArma = new ConjuntoArmas(arma);
+			Movimento mv = new Movimento(pintarArma, this, indice);
+			pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) tamanhoQuadrado,
 					(int) tamanhoQuadrado);
-			sub.setLayout(null);
+			pintarArma.setLayout(null);
 			deslocaX -= 43;
-			todasAsArmas.add(sub);
+			todasAsArmas.add(pintarArma);
 			indice += 1;
 		}
 
@@ -113,13 +118,14 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		deslocaY += 87;
 
 		for (int i = 0; i < 3; i++) { // Destroyer
-			destroyer = new ConjuntoArmas(desMatriz, tamanhoQuadrado + 2, new Color(255, 227, 72, 255), "Destroyer");
-			Movimento mv = new Movimento(destroyer, this, indice);
-			destroyer.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 2) + 2,
+			arma = new Arma(desMatriz, tamanhoQuadrado + 2, "Destroyer");
+			pintarArma = new ConjuntoArmas(arma);
+			Movimento mv = new Movimento(pintarArma, this, indice);
+			pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 2) + 2,
 					(int) tamanhoQuadrado);
-			destroyer.setLayout(null);
+			pintarArma.setLayout(null);
 			deslocaX -= 71;
-			todasAsArmas.add(destroyer);
+			todasAsArmas.add(pintarArma);
 			indice += 1;
 		}
 
@@ -127,25 +133,27 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		deslocaY += 87;
 
 		for (int i = 0; i < 2; i++) { // Cruzador
-			cruzador = new ConjuntoArmas(cruzaMatriz, tamanhoQuadrado + 6, new Color(255, 167, 28, 255), "Cruzador");
-			Movimento mv = new Movimento(cruzador, this, indice);
-			cruzador.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 4) + 6,
+			arma = new Arma(cruzaMatriz, tamanhoQuadrado + 6,  "Cruzador");
+			pintarArma = new ConjuntoArmas(arma);
+			Movimento mv = new Movimento(pintarArma, this, indice);
+			pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 4) + 6,
 					(int) tamanhoQuadrado);
-			cruzador.setLayout(null);
+			pintarArma.setLayout(null);
 			deslocaX -= 127;
-			todasAsArmas.add(cruzador);
+			todasAsArmas.add(pintarArma);
 			indice += 1;
 		}
 
 		deslocaX = 750;
 		deslocaY += 87;
 
-		couro = new ConjuntoArmas(couroMatriz, tamanhoQuadrado + 8, new Color(155, 84, 22, 255), "Couro");
-		Movimento mv = new Movimento(couro, this, indice);
-		couro.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 5) + 8,
+		arma = new Arma(couroMatriz, tamanhoQuadrado + 8, "Couro");
+		pintarArma = new ConjuntoArmas(arma);
+		Movimento mv = new Movimento(pintarArma, this, indice);
+		pintarArma.setBounds((int) (xIni - deslocaX), (int) (yIni + deslocaY), (int) (tamanhoQuadrado * 5) + 8,
 				(int) tamanhoQuadrado);
-		couro.setLayout(null);
-		todasAsArmas.add(couro);
+		pintarArma.setLayout(null);
+		todasAsArmas.add(pintarArma);
 
 		/******************* Paint Armas *********************/
 		for (int i = 0; i < todasAsArmas.size(); i++) {
@@ -199,7 +207,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				if (tab[i][j].arma != null) {
-					switch (tab[i][j].arma.tipo) {
+					switch (tab[i][j].arma.getTipo()) {
 					case "Hidroaviao": {
 						ctrl.getSoltaMouse(i, j, 1);
 						break;
@@ -302,7 +310,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 				xArmaTab = (int) x;
 				yArmaTab = (int) y;
 				armaNoTab = true;
-				matrizArmaTab = todasAsArmas.get(posicao).getMatriz();
+				matrizArmaTab = todasAsArmas.get(posicao).getArma().getMatriz();
 				this.remove(todasAsArmas.get(posicao));
 				contadorArmas++;
 				if (contadorArmas == 15) {
@@ -311,7 +319,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 				for (int i = 0; i < matrizArmaTab.length; i++) {
 					for (int j = 0; j < matrizArmaTab[i].length; j++) {
 						if (matrizArmaTab[i][j] == 1) {
-							tab[yArmaTab + i][xArmaTab + j].arma = todasAsArmas.get(posicao);
+							tab[yArmaTab + i][xArmaTab + j].arma = todasAsArmas.get(posicao).getArma();
 						}
 					}
 				}

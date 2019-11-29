@@ -15,6 +15,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 	Line2D.Double ln1[]=new Line2D.Double[64];
 	Line2D.Double ln2[]=new Line2D.Double[64];
 	Fachada ctrl;
+	JButton passarVez = new JButton();
 	
 	public PNBatalha(Fachada c) {
 		Double x=xIni;
@@ -59,6 +60,20 @@ public class PNBatalha extends JPanel implements MouseListener {
 			ln2[i]=new Line2D.Double(xIni/16, yIni+alt*i, xIni/16+15*larg, yIni+alt*i);
 			ln2[16+i]=new Line2D.Double(xIni/16+larg*i, yIni, xIni/16+larg*i, yIni+15*alt);
 		}
+		passarVez.setEnabled(false);
+		passarVez.setText("Passar Vez");
+		passarVez.setBounds(600, 600, 100, 40);
+		passarVez.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				passarVez.setEnabled(false);
+				ctrl.passaVez();
+				jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
+				adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
+				repaint();
+			}
+		});
+		add(passarVez);
+		setLayout(null);
 
 	}
 	
@@ -161,7 +176,6 @@ public class PNBatalha extends JPanel implements MouseListener {
 	
 	public void mouseClicked(MouseEvent e) {
 		double x=e.getX(),y=e.getY();
-		int vez = ctrl.getCtrlVez();
 		x-=xIni;
 		y-=yIni;
 		
@@ -172,12 +186,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 				SwingUtilities.getWindowAncestor(this).dispose();
 			else {
 				System.out.printf("(%.2f, %.2f)\n", x, y);
-			}
-			int novaVez = ctrl.getCtrlVez();
-			
-			if(vez != novaVez) {
-				jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
-				adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
+				passarVez.setEnabled(true);
 			}
 		}
 		repaint();

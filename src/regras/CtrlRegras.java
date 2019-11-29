@@ -8,6 +8,7 @@ public class CtrlRegras {
 	int prontos = 0;
 	int pontosJ1 = 0;
 	int pontosJ2 = 0;
+	boolean jaJogou = false;
 	public TrocaTabuleiros painel;
 	String jogadores[] = new String[2]; 
 	public int tabuleiro1 [][]= { 
@@ -123,7 +124,7 @@ public class CtrlRegras {
 	}
 	
 	public boolean ataque(int linha, int coluna) {
-		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0) {
+		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0 && jaJogou == false) {
 			if(tabuleiro2[linha][coluna] == 0)
 				mascaraTabuleiro2[linha][coluna] = -1;
 			else { 
@@ -131,8 +132,8 @@ public class CtrlRegras {
 				pontosJ1 += tabuleiro2[linha][coluna];
 				System.out.printf("pontosJ1: %d\n", pontosJ1);
 			}
-			vez = 2;
-		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0) {
+			jaJogou = true;
+		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jaJogou == false) {
 			if(tabuleiro1[linha][coluna] == 0)
 				mascaraTabuleiro1[linha][coluna] = -1;
 			else {
@@ -140,7 +141,7 @@ public class CtrlRegras {
 				pontosJ2 += tabuleiro1[linha][coluna];
 				System.out.printf("pontosJ2: %d\n", pontosJ2);
 			}
-			vez = 1;
+			jaJogou = true;
 		}
 		return quemGanhou();
 	}
@@ -172,4 +173,14 @@ public class CtrlRegras {
 			painel.atualizaInterface();
 		}
 	}
+	
+	public void passaVez() {
+		if(getVez() == 1)
+			vez = 2;
+		else if(getVez() == 2)
+			vez =1;
+		
+		jaJogou = false;
+	}
+	
 }

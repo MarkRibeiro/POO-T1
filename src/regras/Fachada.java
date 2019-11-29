@@ -67,4 +67,8 @@ public class Fachada {
 	public int [][] getTabuleiro2(){
 		return ctrl.tabuleiro2;
 	}
+	
+	public void passaVez() {
+		ctrl.passaVez();
+	}
 }

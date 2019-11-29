@@ -5,17 +5,29 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class ConjuntoArmas extends JPanel {
-		
-	private double tamanho;
-	private Color cor;
-	private int matriz[][];
-	public String tipo;
 	
-	public ConjuntoArmas(int armaMatriz[][], double tamanhoArma, Color corArma, String tipo ) {
-		this.cor = corArma;
-		this.tamanho = tamanhoArma;
-		this.matriz = armaMatriz;
-		this.tipo = tipo;
+	private Arma arma;
+	private Color cor;
+	
+	public ConjuntoArmas(Arma arma1) {
+		this.arma = arma1;
+		switch( arma.getTipo().toLowerCase()) {
+		case "hidroaviao":
+			this.cor=new Color(64, 85, 27, 255);
+			break;
+		case "submarino":
+			this.cor = new Color(74, 148, 62, 255);
+			break;
+		case "destroyer":
+			this.cor = new Color(255, 227, 72, 255);
+			break;
+		case "cruzador":
+			this.cor = new Color(255, 167, 28, 255);
+			break;
+		case "couro":
+			this.cor = new Color(155, 84, 22, 255);
+			break;
+		}
 		this.setBackground(new Color(0, 0, 0, 0));
 	}
 	
@@ -29,14 +41,12 @@ public class ConjuntoArmas extends JPanel {
                 BasicStroke.JOIN_MITER,
                 10.0f));
 		
-		
-		
-		
+			
 
-		for(int i = 0; i < matriz.length; i++) {
-			for(int j = 0; j < matriz[i].length;j++) {
-				rt=new Rectangle2D.Double(j*tamanho,i*tamanho,tamanho,tamanho);
-				if( matriz[i][j]==1 ) {
+		for(int i = 0; i < arma.getMatriz().length; i++) {
+			for(int j = 0; j < arma.getMatriz()[i].length;j++) {
+				rt=new Rectangle2D.Double(j*arma.getTamanho(),i*arma.getTamanho(),arma.getTamanho(),arma.getTamanho());
+				if( arma.getMatriz()[i][j]==1 ) {
 					g2d.setPaint(cor);
 					g2d.fill(rt);
 				}else{
@@ -47,35 +57,17 @@ public class ConjuntoArmas extends JPanel {
 		}
 	}
 	
-	public int[][] getMatriz(){
-		return this.matriz;		
-	}
+
 	
 	public void viraArma() {
-		boolean virou = false;
-		int auxMatriz[][] = new int[this.matriz[0].length][matriz.length];
-		for(int i=0; i < this.matriz.length; i++) {
-			for(int j=0; j < this.matriz[0].length; j++) {
-				auxMatriz[j][i] = this.matriz[i][j];
-				virou = true;
-			}
-		}
-		this.matriz = auxMatriz;
-		if(virou == true) {
-			int auxMatriz2[][] = new int[auxMatriz.length][auxMatriz[0].length];
-			for(int i=0; i < auxMatriz.length; i++) {{
-					auxMatriz2[i] = auxMatriz[auxMatriz.length-i-1];
-					virou = false;
-				}
-			}
-			this.matriz = auxMatriz2;
-		}
-		
+		arma.viraArma();
 		this.setBounds(this.getX(), this.getY(), this.getHeight(), this.getWidth() );
 		
 	}
 	
-	
+	public Arma getArma() {
+		return this.arma;
+	}
 
 
 }
