@@ -3,15 +3,15 @@ package regras;
 import gui.FRGanhador;
 
 public class CtrlRegras {
-	int vez=1;
-	int jogadas = 9;
-	int prontos = 0;
-	int pontosJ1 = 0;
-	int pontosJ2 = 0;
-	int jogadasNaRodada = 0;
-	public TrocaTabuleiros painel;
-	String jogadores[] = new String[2]; 
-	public int tabuleiro1 [][]= { 
+	private int vez=1;
+	private int jogadas = 9;
+	private int prontos = 0;
+	private int pontosJ1 = 0;
+	private int pontosJ2 = 0;
+	private int jogadasNaRodada = 0;
+	private TrocaTabuleiros painel;
+	private String jogadores[] = new String[2]; 
+	private int tabuleiro1 [][]= { 
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -28,7 +28,7 @@ public class CtrlRegras {
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 	
-	public int tabuleiro2 [][]= { 
+	private int tabuleiro2 [][]= { 
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -45,7 +45,7 @@ public class CtrlRegras {
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 	
-	public int mascaraTabuleiro1 [][]= { 
+	private int mascaraTabuleiro1 [][]= { 
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -62,7 +62,7 @@ public class CtrlRegras {
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 	
-	public int mascaraTabuleiro2 [][]= { 
+	private int mascaraTabuleiro2 [][]= { 
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -201,6 +201,26 @@ public class CtrlRegras {
 			return true;
 		else
 			return false;
+	}
+	
+	public int[][] getTabuleiro1(){
+		return this.tabuleiro1;
+	}
+	
+	public int[][] getTabuleiro2(){
+		return this.tabuleiro2;
+	}
+	
+	public int[][] getMascaraTabuleiro1(){
+		return this.mascaraTabuleiro1;
+	}
+	
+	public int[][] getMascaraTabuleiro2(){
+		return this.mascaraTabuleiro2;
+	}
+	
+	public void setPainel(TrocaTabuleiros painel) {
+		this.painel = painel;
 	}
 	
 }

@@ -12,15 +12,24 @@ public class FRGanhador extends JFrame{
 		setSize(LARG_WINDOW,ALT_WINDOW);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		getContentPane().add(new PNGanhador("sdjkhfsdjk"));
-		
-
 		JLabel l1 = new JLabel();
+		JButton maisUma = new JButton();
+		JButton fim = new JButton();
+		int xIni = 200, yIni = 40, yDist = 50;
 		
 		l1.setText(ganhador + " Ganhou!!!");
-
-		l1.setBounds(160, 200,180, 15);
-		add(l1);		
+		l1.setBounds(195, yIni + yDist, 110, 30);
+		
+		maisUma.setText("Reiniciar");
+		maisUma.setBounds(xIni, yIni + yDist*2, 100, 30);
+		
+		fim.setText("Finalizar");
+		fim.setBounds(xIni, yIni + yDist*3, 100, 30);
+		
+		add(l1);			
+		add(maisUma);
+		add(fim);
+		
 		setLayout(null);
 	}
 }

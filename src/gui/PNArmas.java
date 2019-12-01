@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.awt.event.*;
 import regras.*;
 
-public class PNArmas extends JPanel implements MouseListener, ArmasObserver, TrocaTabuleiros, KeyListener {
+public class PNArmas extends JPanel implements MouseListener, ArmasObserver, TrocaTabuleiros, KeyListener, Observable {
 	double xIni = 800.0, yIni = 100.0, larg = 30, alt = 30, espLinha = 0.0;
 	JLabel jogadorAtual;
 	double tamanhoQuadrado = 28;
@@ -30,6 +30,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	int cruzaMatriz[][] = { { 1, 1, 1, 1 } };
 	int couroMatriz[][] = { { 1, 1, 1, 1, 1 } };
 	TrocaFase t;
+	ArrayList<Observer> obs=new ArrayList<Observer>();
 	
 	public PNArmas(Fachada c, TrocaFase t) {
 		double x = xIni, y = yIni; 
@@ -363,7 +364,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	}
 
 	@Override
-	public void whenOtherClicked(int butao, int posicao) {
+	public void whenRightClicked(int butao, int posicao) {
 		if (butao == 3) {
 			todasAsArmas.get(posicao).viraArma();
 		}
@@ -397,5 +398,23 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+	}
+
+	@Override
+	public void addObserver(Observer o) {
+		obs.add(o);
+		
+	}
+
+	@Override
+	public void removeObserver(Observer o) {
+		obs.remove(o);
+	}
+
+	@Override
+	public Object get() {
+		Object info[] = new Object[1]; 
+		info[0] = "t";
+		return info;
 	}
 }

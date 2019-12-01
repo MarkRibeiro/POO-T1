@@ -32,9 +32,9 @@ public class Movimento implements MouseListener, MouseMotionListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(e.getButton() == MouseEvent.BUTTON3) {
-			armas.whenOtherClicked(3,indice);
+			armas.whenRightClicked(3,indice);
 		}else if(e.getButton() == MouseEvent.BUTTON2) {
-			armas.whenOtherClicked(2,indice);
+			armas.whenRightClicked(2,indice);
 		}
 	}
 

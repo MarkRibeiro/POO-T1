@@ -38,7 +38,7 @@ public class PNLogin extends JPanel{
 		add(jogador2);
 		
 		comecar.setText("Comecar");
-		comecar.setBounds(200, yIni + yDist*2, 100, 40);
+		comecar.setBounds(200, yIni + yDist*2, 100, 30);
 		comecar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ctrl.getImportaNomes(jogador1.getText(), jogador2.getText());

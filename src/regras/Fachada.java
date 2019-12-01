@@ -45,27 +45,28 @@ public class Fachada {
 	}
 	
 	public void getPainel(TrocaTabuleiros painel) {
-		ctrl.painel = painel;
+		ctrl.setPainel(painel);
 	}
 	
-	public int[][] getMascaraTabuleiro1() {
-		return ctrl.mascaraTabuleiro1;
-	}
-	
-	public int[][] getMascaraTabuleiro2() {
-		return ctrl.mascaraTabuleiro2;
-	}
-	
+
 	public String getCtrlNomeOponente(){
 		return ctrl.getNomeOponente();
 	}
 	
+	public int[][] getMascaraTabuleiro1() {
+		return ctrl.getMascaraTabuleiro1();
+	}
+	
+	public int[][] getMascaraTabuleiro2() {
+		return ctrl.getMascaraTabuleiro2();
+	}
+		
 	public int[][] getTabuleiro1(){
-		return ctrl.tabuleiro1;
+		return ctrl.getTabuleiro1();
 	}
 	
 	public int [][] getTabuleiro2(){
-		return ctrl.tabuleiro2;
+		return ctrl.getTabuleiro2();
 	}
 	
 	public void passaVez() {

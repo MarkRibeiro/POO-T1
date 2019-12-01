@@ -5,7 +5,7 @@ import regras.*;
 import java.awt.*;
 import javax.swing.*;
 
-public class FRMain extends JFrame implements TrocaFase {
+public class FRMain extends JFrame implements TrocaFase, Observer {
 	final int LARG_WINDOW=1300;
 	final int ALT_WINDOW=700;
 	Fachada c; 
@@ -41,6 +41,13 @@ public class FRMain extends JFrame implements TrocaFase {
 		Fachada c = Fachada.getFachada();
 		FRMain m = new FRMain(c);
 		(new FRInicio(m, c)).setVisible(true);
+		
+	}
+	@Override
+	public void notify(Observable o) {
+		Object lob[] =(Object[]) o.get();
+		
+		
 		
 	}
 }
