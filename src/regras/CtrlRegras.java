@@ -1,5 +1,14 @@
 package regras;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
+
 import gui.FRGanhador;
 
 public class CtrlRegras {
@@ -142,20 +151,38 @@ public class CtrlRegras {
 	
 	public boolean ataque(int linha, int coluna) {
 		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0 && jogadasNaRodada < 3) {
-			if(tabuleiro2[linha][coluna] == 0)
-				mascaraTabuleiro2[linha][coluna] = -1;
+			if(tabuleiro2[linha][coluna] == 0) {
+				mascaraTabuleiro2[linha][coluna] = 10;
+				tabuleiro2[linha][coluna] = 10;
+			}
 			else { 
-				mascaraTabuleiro2[linha][coluna] = tabuleiro2[linha][coluna];
+				if(mascaraTabuleiro2[linha][coluna]<0) {
+					mascaraTabuleiro2[linha][coluna] = (tabuleiro2[linha][coluna]);
+					tabuleiro2[linha][coluna] = (mascaraTabuleiro2[linha][coluna]);
+				}else {
+					mascaraTabuleiro2[linha][coluna] = (tabuleiro2[linha][coluna]*-1);
+					tabuleiro2[linha][coluna] = (mascaraTabuleiro2[linha][coluna]*-1);
+				}
 				pontosJ1 += tabuleiro2[linha][coluna];
+
 				System.out.printf("pontosJ1: %d\n", pontosJ1);
 			}
 			jogadasNaRodada += 1;
 		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jogadasNaRodada < 3) {
-			if(tabuleiro1[linha][coluna] == 0)
-				mascaraTabuleiro1[linha][coluna] = -1;
+			if(tabuleiro1[linha][coluna] == 0) {
+				mascaraTabuleiro1[linha][coluna] = 10;
+				tabuleiro1[linha][coluna] = 10;
+			}
 			else {
-				mascaraTabuleiro1[linha][coluna] = tabuleiro1[linha][coluna];
+				if(mascaraTabuleiro1[linha][coluna]<0) {
+					mascaraTabuleiro1[linha][coluna] = (tabuleiro1[linha][coluna]);
+					tabuleiro1[linha][coluna] = (mascaraTabuleiro1[linha][coluna]);
+				}else {
+					mascaraTabuleiro1[linha][coluna] = (tabuleiro1[linha][coluna]*-1);
+					tabuleiro1[linha][coluna] = (mascaraTabuleiro1[linha][coluna]*-1);
+				}
 				pontosJ2 += tabuleiro1[linha][coluna];
+				
 				System.out.printf("pontosJ2: %d\n", pontosJ2);
 			}
 			jogadasNaRodada += 1;
@@ -196,6 +223,111 @@ public class CtrlRegras {
 		jogadasNaRodada = 0;
 	}
 	
+	
+	public void salvarJogo(boolean fimDeVez, int vez, int pontos1, int pontos2 ) {
+		if(fimDeVez == true) {
+			File arquivo;
+			FileWriter fr = null;
+			String arq = "";
+			try {
+				arquivo = new File("BatalhaNaval.txt");
+				fr = new FileWriter(arquivo);
+				
+				/*Salvar tabuleiro 1*/
+				for (int i = 0; i<15; i++) {
+					for (int j = 0; j < 15; j++) {
+						arq = arq + Integer.toString(tabuleiro1[j][i]);
+						if(i == 14 && j == 14) {
+							arq = arq + "\n";
+ 						} else {
+ 							arq = arq + ";"; 
+ 						}
+						
+					}
+				}
+				
+				/*Salvar tabuleiro 2*/
+				for (int i = 0; i<15; i++) {
+					for (int j = 0; j < 15; j++) {
+						arq = arq + Integer.toString(tabuleiro2[j][i]);
+						if(i == 14 && j == 14) {
+							arq = arq + "\n";
+ 						} else {
+ 							arq = arq + ";"; 
+ 						}
+						
+					}
+				}
+				
+				arq = arq + Integer.toString(vez) + "\n";
+				arq = arq + Integer.toString(pontos1) + "\n";
+				arq = arq + Integer.toString(pontos2) + "\n";
+				arq = arq + jogadores[0] + "\n" + jogadores[1] + "\n";
+				
+				fr.write(arq);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				
+				
+			} finally {
+				// close resources
+				try {
+					fr.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
+	public void carregarJogo(File BatalhaNaval) {
+		String linha;
+		int numLinha = 0;
+		
+		try {
+			Scanner sc = new Scanner(BatalhaNaval); 
+	    while (sc.hasNextLine()) {
+	    	linha = sc.nextLine();
+	    	String infoJogo[]= linha.split(";", -1);
+	    	int v =0 ;
+	    	if(numLinha == 0) {
+	    		
+	    		for (int coluna = 0; coluna<15; coluna++) {
+	    			for (int fileira = 0; fileira < 15; fileira++) {
+	    				tabuleiro1[fileira][coluna]=Integer.parseInt(infoJogo[v++]);
+	    				if(tabuleiro1[fileira][coluna]<0) {
+	    					System.out.printf("%d\n", tabuleiro1[fileira][coluna]);
+	    				}
+	    			}
+	    		}
+	    	} else if (numLinha == 1){
+	    		for (int coluna = 0; coluna <15; coluna ++) {
+	    			for (int fileira = 0; fileira < 15; fileira++) {
+	    				tabuleiro2[fileira][coluna]=Integer.parseInt(infoJogo[v++]);
+	    			}
+	    		}
+	    	} else if (numLinha == 2) {
+	    		vez = Integer.parseInt(infoJogo[0]);
+	    	} else if (numLinha == 3) {
+	    		pontosJ1 = Integer.parseInt(infoJogo[0]);
+	    	} else if (numLinha == 4) {
+	    		pontosJ2 = Integer.parseInt(infoJogo[0]);
+		    } else if (numLinha == 5) {
+		    	jogadores[0] = infoJogo[0];
+		    } else {
+		    	jogadores[1] = infoJogo[0];
+		    }
+	    	numLinha++;
+	  } 
+	    sc.close();
+		}catch ( FileNotFoundException e) {
+			e.printStackTrace();
+			
+			return;
+		}
+	}
+	
 	public boolean fimDeVez() {
 		if(jogadasNaRodada == 3)
 			return true;
@@ -222,5 +354,14 @@ public class CtrlRegras {
 	public void setPainel(TrocaTabuleiros painel) {
 		this.painel = painel;
 	}
+	
+	public int PontosJ1() {
+		return pontosJ1;
+	}
+	
+	public int PontosJ2() {
+		return pontosJ2;
+	}
+	
 	
 }

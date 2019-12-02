@@ -30,4 +30,19 @@ public class FRInicio extends JFrame{
 		setTitle("Jogadores");
 		revalidate();
 	}
+	
+	public void carregaBatalha(PNBatalha b) {
+		int width=1300;
+		int height=700;
+
+		remove(carregamento);
+		getContentPane().add(b);
+		this.setBounds(0,0, width, height);
+		revalidate();
+		repaint();
+	}
+	
+	public FRMain getMain() {
+		return m;
+	}
 }

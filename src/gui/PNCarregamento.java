@@ -7,19 +7,33 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+
+
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-import regras.Fachada;
+import regras.*;
 
 public class PNCarregamento extends JPanel{
+	ArrayList<Observer> obs=new ArrayList<Observer>(); 
+	Fachada ctrl = Fachada.getFachada();
+	
+	
+	final JFileChooser fc = new JFileChooser();	
+	FileNameExtensionFilter filter = new FileNameExtensionFilter( "Batalha Naval", "txt");
+	
+	
 	public PNCarregamento(FRInicio m) {
 		JButton novo = new JButton();
 		JButton carrega = new JButton();
 		JLabel nome = new JLabel();
+		PNBatalha b = new PNBatalha(ctrl, m.getMain());
 		
 		nome.setText("Batalha Naval");
 		Font n = nome.getFont().deriveFont(Font.BOLD, 35);
@@ -31,33 +45,49 @@ public class PNCarregamento extends JPanel{
 		novo.setText("Novo Jogo");
 		novo.setBounds(190, 235, 120, 30);
 		
+		
+		
 		novo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				m.chamaLogin();
 			}
 		});
-		
+				
 		add(novo);
+		fc.setFileFilter(filter); 
+		carrega.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int returnVal = fc.showOpenDialog(getParent());
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			       System.out.println("Voce escolheu abrir o jogo: " +
+			    		 fc.getSelectedFile().getName());
+			       		File arquivo = fc.getSelectedFile();
+			       		ctrl.carregarJogo(arquivo);
+			       		m.carregaBatalha(b);
+
+			    }
 		
+			}
+		});
 		carrega.setText("Carregar Jogo");
 		carrega.setBounds(190, 285, 120, 30);
 		add(carrega);
 		
 		setLayout(null);
 	}
-	
+		
 	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		Graphics2D g2d = (Graphics2D)g;
 		try {
 		    File pathToFile = new File("Navio.png");
-		    System.out.println("imagem carregando");
 		    Image image = ImageIO.read(pathToFile);
-		    System.out.println("imagem carregada");
 			g2d.drawImage(image, 160, 0, 180, 180, null);
 		} catch (Exception e) {
 			
 		}
 		
 	}
+
+
 }

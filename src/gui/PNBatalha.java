@@ -3,6 +3,9 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.event.*;
 import regras.*;
  
@@ -15,13 +18,15 @@ public class PNBatalha extends JPanel implements MouseListener {
 	Line2D.Double ln1[]=new Line2D.Double[64];
 	Line2D.Double ln2[]=new Line2D.Double[64];
 	Fachada ctrl;
+	FRMain m;
 	JButton passarVez = new JButton();
 	JButton salvar = new JButton();
 	
-	public PNBatalha(Fachada c) {
+	public PNBatalha(Fachada c, FRMain m) {
 		Double x=xIni;
 		Double y=yIni;
 		ctrl=c;
+		this.m = m;
 		jogadorAtual = new JLabel();
 		adversarioAtual = new JLabel();
 		jogadorAtual.setBounds(50, 20, 450, 15);
@@ -67,6 +72,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 			public void actionPerformed(ActionEvent e) {
 				passarVez.setEnabled(false);
 				salvar.setEnabled(false);
+				
 				ctrl.passaVez();
 				jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
 				adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
@@ -113,9 +119,9 @@ public class PNBatalha extends JPanel implements MouseListener {
 					masc = mascaraTabuleiro2;
 				}
 				//System.out.print(ctrl.tabuleiro1[i][j]);
-				if(masc[i][j] == -1)
+				if(masc[i][j] == 10)
 					g2d.setPaint(new Color(0, 0, 255, 255));
-				else if (masc[i][j] > 0)
+				else if (masc[i][j] < 0)
 					g2d.setPaint(new Color(255, 0, 0, 255));
 				else if(conteudoTab1[i][j] == 1)
 					g2d.setPaint(new Color(64, 85, 27, 255));
@@ -142,17 +148,17 @@ public class PNBatalha extends JPanel implements MouseListener {
 					conteudoTab2 = mascaraTabuleiro2;
 				}
 				//System.out.print(ctrl.tabuleiro1[i][j]);
-				if(conteudoTab2[i][j] == -1)
+				if(conteudoTab2[i][j] == 10)
 					g2d.setPaint(new Color(0, 0, 255, 255));
-				else if(conteudoTab2[i][j] == 1)
+				else if(conteudoTab2[i][j] == 1 || conteudoTab2[i][j] == -1)
 					g2d.setPaint(new Color(64, 85, 27, 255));
-				else if(conteudoTab2[i][j] == 2)
+				else if(conteudoTab2[i][j] == 2 || conteudoTab2[i][j] == -2)
 					g2d.setPaint(new Color(74, 148, 62, 255));
-				else if(conteudoTab2[i][j] == 3)
+				else if(conteudoTab2[i][j] == 3 || conteudoTab2[i][j] == -3)
 					g2d.setPaint(new Color(255, 227, 72, 255));
-				else if(conteudoTab2[i][j] == 4)
+				else if(conteudoTab2[i][j] == 4 || conteudoTab2[i][j] == -4)
 					g2d.setPaint(new Color(255, 167, 28, 255));
-				else if(conteudoTab2[i][j] == 5)
+				else if(conteudoTab2[i][j] == 5 || conteudoTab2[i][j] == -5)
 					g2d.setPaint(new Color(155, 84, 22, 255));
 				else 
 					g2d.setPaint(new Color(0,0,0,0));
@@ -189,7 +195,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 		if(x>=0 && y>=0 && x<=15 && y<=15) {
 			if(ctrl.getAtaque((int)y,(int)x) == false) {
 
-				FRGanhador g = new FRGanhador(ctrl.getCtrlNomeVez());
+				FRGanhador g = new FRGanhador(this.m, ctrl, ctrl.getCtrlNomeVez());
 				g.setBackground(Color.red);
 				g.setVisible(true);
 				SwingUtilities.getWindowAncestor(this).dispose();
@@ -198,6 +204,11 @@ public class PNBatalha extends JPanel implements MouseListener {
 				System.out.printf("(%.2f, %.2f)\n", x, y);
 				salvar.setEnabled(true);
 				passarVez.setEnabled(true);
+				salvar.addActionListener(new ActionListener() { //TODO: observer do salvar
+					public void actionPerformed(ActionEvent e) {
+						ctrl.salvarJogo(ctrl.getFimDeVez(), ctrl.getCtrlVez(), ctrl.getPontosJogador1() , ctrl.getPontosJogador2());
+					}
+				});
 			}
 		}
 		repaint();

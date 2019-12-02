@@ -1,5 +1,7 @@
 package regras;
 
+import java.io.File;
+
 public class Fachada {
 	CtrlRegras ctrl;
 	static Fachada f=null;
@@ -79,4 +81,26 @@ public class Fachada {
 	public boolean checarQuadrado(int x, int y) {
 		return ctrl.checarQuadrado(x, y);
 	}
+	
+	public void salvarJogo(boolean tresAtaques, int vez, int pontos1, int pontos2 ) {
+		ctrl.salvarJogo(tresAtaques, vez, pontos1, pontos2 );
+	}
+	
+	public boolean getFimDeVez() {
+		return ctrl.fimDeVez();
+	}
+	
+	public int getPontosJogador1() {
+		return ctrl.PontosJ1();
+	}
+	
+	public int getPontosJogador2() {
+		return ctrl.PontosJ2();
+	}
+
+	public void carregarJogo(File BatalhNaval) {
+		ctrl.carregarJogo(BatalhNaval);
+	}
+	
+	
 }

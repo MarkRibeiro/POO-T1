@@ -27,11 +27,12 @@ public class FRMain extends JFrame implements TrocaFase, Observer {
 	}
 	public void trocaFase() {
 		getContentPane().remove(fase);
-		getContentPane().add(new PNBatalha(c));
+		getContentPane().add(new PNBatalha(c, this));
 		revalidate();
 		repaint();
 	}
 	
+
 	public void iniciarPosicionamento() {
 		fase.preparaInicioPartidas();
 		this.setVisible(true);

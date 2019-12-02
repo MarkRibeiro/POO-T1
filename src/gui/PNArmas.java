@@ -94,9 +94,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 
 		for (int i = 0; i < 5; i++) { // Hidroavioes
 			arma = new Arma(hidroMatriz, tamanhoQuadrado + 2, "Hidroaviao");
-			System.out.printf(">%s<\n", arma.toString());
 			pintarArma = new ConjuntoArmas(arma);
-			System.out.printf("sdgsdfgsdfgsdf\n");
 			Movimento mv = new Movimento(pintarArma, this, (int)tamanhoQuadrado, indice);
 			pintarArma.setBounds((int) (xIni - deslocaX), (int) yIni, (int) (tamanhoQuadrado + 2) * 3,
 					(int) (tamanhoQuadrado + 2) * 2);
@@ -333,7 +331,6 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 				t: for (int i = 0; i < matrizArmaTab.length; i++) {
 					for (int j = 0; j < matrizArmaTab[i].length; j++) {
 						if (matrizArmaTab[i][j] == 1) {
-							System.out.printf("Testando (%d, %d)\n", xArmaTab + j, yArmaTab + i);
 							if (ctrl.checarQuadrado(xArmaTab + j, yArmaTab + i) == false) {
 								conflito = true;
 								break t;
