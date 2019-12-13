@@ -14,9 +14,9 @@ public class FRInicio extends JFrame{
 	Fachada ctrl;
 	PNCarregamento carregamento = new PNCarregamento(this);
 	
-	public FRInicio(FRMain m, Fachada ctrl) {
+	public FRInicio(FRMain m) {
 		this.m = m;
-		this.ctrl = ctrl;
+		this.ctrl = Fachada.getFachada();
 		setTitle("Batalha Naval");
 		setSize(LARG_WINDOW,ALT_WINDOW);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -26,7 +26,6 @@ public class FRInicio extends JFrame{
 	public void chamaLogin() {
 		remove(carregamento);
 		getContentPane().add(new PNLogin(m, ctrl));
-		//getContentPane().add(new PNGanhador("casa"));
 		setTitle("Jogadores");
 		revalidate();
 	}

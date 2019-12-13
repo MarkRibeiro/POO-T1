@@ -28,8 +28,9 @@ public class FRGanhador extends JFrame{
         maisUma.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	Fachada ctrl = Fachada.getFachada();
-            	FRMain m = new FRMain(ctrl);
-            	FRInicio ini = new FRInicio(m,ctrl);
+            	ctrl.resetCtrl();
+            	FRMain m = new FRMain();
+            	FRInicio ini = new FRInicio(m);
             	ini.setVisible(true);
             	dispose();
             }

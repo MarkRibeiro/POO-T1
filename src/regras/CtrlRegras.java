@@ -19,7 +19,9 @@ public class CtrlRegras {
 	private int pontosJ2 = 0;
 	private int jogadasNaRodada = 0;
 	private TrocaTabuleiros painel;
-	private String jogadores[] = new String[2]; 
+	private String jogadores[] = new String[2];
+	static CtrlRegras global = new CtrlRegras();
+	private int ultimoTiro;
 	private int tabuleiro1 [][]= { 
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -88,7 +90,11 @@ public class CtrlRegras {
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 	
-	public CtrlRegras() {
+	private CtrlRegras() {
+	}
+	
+	public void reset() {
+		global = new CtrlRegras();
 	}
 	
 	public void importaNomes(String n1, String n2) {
@@ -143,7 +149,9 @@ public class CtrlRegras {
 				if ((xf < 0 || xf >= 15) || (yf < 0 || yf >= 15)) {
 					continue;
 				}
-				if (getMatriz()[yf][xf] != 0) return false;
+				if (getMatriz()[yf][xf] != 0) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -158,15 +166,14 @@ public class CtrlRegras {
 			else { 
 				if(mascaraTabuleiro2[linha][coluna]<0) {
 					mascaraTabuleiro2[linha][coluna] = (tabuleiro2[linha][coluna]);
-					tabuleiro2[linha][coluna] = (mascaraTabuleiro2[linha][coluna]);
 				}else {
 					mascaraTabuleiro2[linha][coluna] = (tabuleiro2[linha][coluna]*-1);
-					tabuleiro2[linha][coluna] = (mascaraTabuleiro2[linha][coluna]*-1);
 				}
 				pontosJ1 += tabuleiro2[linha][coluna];
 
 				System.out.printf("pontosJ1: %d\n", pontosJ1);
 			}
+			ultimoTiro = tabuleiro2[linha][coluna];
 			jogadasNaRodada += 1;
 		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jogadasNaRodada < 3) {
 			if(tabuleiro1[linha][coluna] == 0) {
@@ -176,18 +183,21 @@ public class CtrlRegras {
 			else {
 				if(mascaraTabuleiro1[linha][coluna]<0) {
 					mascaraTabuleiro1[linha][coluna] = (tabuleiro1[linha][coluna]);
-					tabuleiro1[linha][coluna] = (mascaraTabuleiro1[linha][coluna]);
 				}else {
 					mascaraTabuleiro1[linha][coluna] = (tabuleiro1[linha][coluna]*-1);
-					tabuleiro1[linha][coluna] = (mascaraTabuleiro1[linha][coluna]*-1);
 				}
 				pontosJ2 += tabuleiro1[linha][coluna];
 				
 				System.out.printf("pontosJ2: %d\n", pontosJ2);
 			}
+			ultimoTiro = tabuleiro1[linha][coluna];
 			jogadasNaRodada += 1;
 		}
 		return quemGanhou();
+	}
+	
+	public int getUltimoTiro() {
+		return ultimoTiro;
 	}
 	
 	boolean quemGanhou() {
@@ -236,7 +246,11 @@ public class CtrlRegras {
 				/*Salvar tabuleiro 1*/
 				for (int i = 0; i<15; i++) {
 					for (int j = 0; j < 15; j++) {
-						arq = arq + Integer.toString(tabuleiro1[j][i]);
+						if(mascaraTabuleiro1[j][i]<0) {
+							arq = arq + Integer.toString(mascaraTabuleiro1[j][i]);
+						} else {
+							arq = arq + Integer.toString(tabuleiro1[j][i]);
+						}
 						if(i == 14 && j == 14) {
 							arq = arq + "\n";
  						} else {
@@ -249,7 +263,11 @@ public class CtrlRegras {
 				/*Salvar tabuleiro 2*/
 				for (int i = 0; i<15; i++) {
 					for (int j = 0; j < 15; j++) {
-						arq = arq + Integer.toString(tabuleiro2[j][i]);
+						if(mascaraTabuleiro1[j][i]<0) {
+							arq = arq + Integer.toString(mascaraTabuleiro1[j][i]);
+						} else {
+							arq = arq + Integer.toString(tabuleiro1[j][i]);
+						}
 						if(i == 14 && j == 14) {
 							arq = arq + "\n";
  						} else {
@@ -270,7 +288,6 @@ public class CtrlRegras {
 				
 				
 			} finally {
-				// close resources
 				try {
 					fr.close();
 				} catch (IOException e1) {
@@ -284,27 +301,34 @@ public class CtrlRegras {
 	public void carregarJogo(File BatalhaNaval) {
 		String linha;
 		int numLinha = 0;
+		int quadrado;
 		
 		try {
 			Scanner sc = new Scanner(BatalhaNaval); 
 	    while (sc.hasNextLine()) {
 	    	linha = sc.nextLine();
-	    	String infoJogo[]= linha.split(";", -1);
+	    	String infoJogo[]= linha.split(";");
 	    	int v =0 ;
 	    	if(numLinha == 0) {
-	    		
 	    		for (int coluna = 0; coluna<15; coluna++) {
 	    			for (int fileira = 0; fileira < 15; fileira++) {
-	    				tabuleiro1[fileira][coluna]=Integer.parseInt(infoJogo[v++]);
-	    				if(tabuleiro1[fileira][coluna]<0) {
-	    					System.out.printf("%d\n", tabuleiro1[fileira][coluna]);
+	    	    		quadrado = Integer.parseInt(infoJogo[v++]);
+	    				if(quadrado < 0 || quadrado == 10) {
+	    					mascaraTabuleiro1[fileira][coluna] = quadrado;
+	    				} else {
+	    					tabuleiro1[fileira][coluna] = quadrado;
 	    				}
 	    			}
 	    		}
 	    	} else if (numLinha == 1){
 	    		for (int coluna = 0; coluna <15; coluna ++) {
 	    			for (int fileira = 0; fileira < 15; fileira++) {
-	    				tabuleiro2[fileira][coluna]=Integer.parseInt(infoJogo[v++]);
+		    			quadrado = Integer.parseInt(infoJogo[v++]);
+	    				if(quadrado < 0 || quadrado == 10) {
+	    					mascaraTabuleiro2[fileira][coluna] = quadrado;
+	    				} else {
+	    					tabuleiro2[fileira][coluna] = quadrado;
+	    				}
 	    			}
 	    		}
 	    	} else if (numLinha == 2) {

@@ -32,9 +32,9 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	TrocaFase t;
 	ArrayList<Observer> obs=new ArrayList<Observer>();
 	
-	public PNArmas(Fachada c, TrocaFase t) {
+	public PNArmas(TrocaFase t) {
 		double x = xIni, y = yIni; 
-		ctrl = c;
+		ctrl = Fachada.getFachada();
 		ctrl.getPainel(this);
 		this.t = t;
 		jogadorAtual = new JLabel();
@@ -266,17 +266,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		double x = e.getX(), y = e.getY();
-		x -= xIni;
-		y -= yIni;
 
-		x = Math.floor(x / larg);
-		y = Math.floor(y / alt);
-		if (x >= 0 && y >= 0 && x <= 15 && y <= 15) {
-			System.out.printf("(%.2f, %.2f)\n", x, y);
-
-		}
-		repaint();
 	}
 
 	public void mouseUp(MouseEvent e) {
@@ -310,7 +300,6 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		y = Math.floor(y / alt);
 		if (e.getButton() != MouseEvent.BUTTON3) {
 			if (x >= 0 && y >= 0 && x <= 15 && y <= 15) {
-				System.out.printf("(%.2f, %.2f)\n", x, y);
 				xArmaTab = (int) x;
 				yArmaTab = (int) y;
 				armaNoTab = true;

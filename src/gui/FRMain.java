@@ -8,12 +8,10 @@ import javax.swing.*;
 public class FRMain extends JFrame implements TrocaFase, Observer {
 	final int LARG_WINDOW=1300;
 	final int ALT_WINDOW=700;
-	Fachada c; 
 	PNArmas fase;
 	
-	public FRMain(Fachada c) {
-		this.c = c;
-		fase = new PNArmas(c, this); 
+	public FRMain() {
+		fase = new PNArmas(this); 
 		Toolkit tk=Toolkit.getDefaultToolkit();
 		Dimension screenSize=tk.getScreenSize();
 		int sl=screenSize.width;
@@ -27,7 +25,7 @@ public class FRMain extends JFrame implements TrocaFase, Observer {
 	}
 	public void trocaFase() {
 		getContentPane().remove(fase);
-		getContentPane().add(new PNBatalha(c, this));
+		getContentPane().add(new PNBatalha(this));
 		revalidate();
 		repaint();
 	}
@@ -39,9 +37,8 @@ public class FRMain extends JFrame implements TrocaFase, Observer {
 	}
 	
 	public static void main(String args[]) {
-		Fachada c = Fachada.getFachada();
-		FRMain m = new FRMain(c);
-		(new FRInicio(m, c)).setVisible(true);
+		FRMain m = new FRMain();
+		(new FRInicio(m)).setVisible(true);
 		
 	}
 	@Override

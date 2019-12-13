@@ -54,7 +54,7 @@ public class Movimento implements MouseListener, MouseMotionListener{
 	public void mousePressed(MouseEvent e) {
 		x = e.getX()/tamQuadrado;
 		y = e.getY()/tamQuadrado;
-		armas.whenClicked(indice);//passar o x e y (divide pelo tamanho do quadrado)
+		armas.whenClicked(indice);
 		offsetX = e.getX();
 	}
 

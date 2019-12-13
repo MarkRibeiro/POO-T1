@@ -7,7 +7,12 @@ public class Fachada {
 	static Fachada f=null;
 	
 	private Fachada() {
-		ctrl=new CtrlRegras();
+		ctrl=CtrlRegras.global;
+	}
+	
+	public void resetCtrl(){
+		ctrl.reset();
+		ctrl = CtrlRegras.global;
 	}
 	
 	public static Fachada getFachada() {
@@ -83,7 +88,7 @@ public class Fachada {
 	}
 	
 	public void salvarJogo(boolean tresAtaques, int vez, int pontos1, int pontos2 ) {
-		ctrl.salvarJogo(tresAtaques, vez, pontos1, pontos2 );
+		ctrl.salvarJogo(tresAtaques, vez, pontos1, pontos2);
 	}
 	
 	public boolean getFimDeVez() {
@@ -102,5 +107,8 @@ public class Fachada {
 		ctrl.carregarJogo(BatalhNaval);
 	}
 	
+	public int getUltimoTiro() {
+		return ctrl.getUltimoTiro();
+	}
 	
 }

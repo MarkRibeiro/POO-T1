@@ -13,6 +13,8 @@ public class PNBatalha extends JPanel implements MouseListener {
 	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
 	int iClick,jClick;
 	JLabel jogadorAtual, adversarioAtual;
+	JLabel situacao;
+	String navio;
 	Celula tab1[][]=new Celula[32][32];
 	Celula tab2[][]=new Celula[32][32];
 	Line2D.Double ln1[]=new Line2D.Double[64];
@@ -22,19 +24,22 @@ public class PNBatalha extends JPanel implements MouseListener {
 	JButton passarVez = new JButton();
 	JButton salvar = new JButton();
 	
-	public PNBatalha(Fachada c, FRMain m) {
+	public PNBatalha(FRMain m) {
 		Double x=xIni;
 		Double y=yIni;
-		ctrl=c;
+		ctrl=Fachada.getFachada();
 		this.m = m;
 		jogadorAtual = new JLabel();
 		adversarioAtual = new JLabel();
+		situacao = new JLabel();
 		jogadorAtual.setBounds(50, 20, 450, 15);
 		adversarioAtual.setBounds(800, 20, 450, 15);
+		situacao.setBounds(550, 343, 200, 15);
 		jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
 		adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
 		add(jogadorAtual);
 		add(adversarioAtual);
+		add(situacao);
 		for(int i=0;i<15;i++) {
 			x=xIni;
 			for(int j=0;j<15;j++) {
@@ -74,6 +79,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 				salvar.setEnabled(false);
 				
 				ctrl.passaVez();
+				situacao.setText("");
 				jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
 				adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
 				repaint();
@@ -118,20 +124,19 @@ public class PNBatalha extends JPanel implements MouseListener {
 					conteudoTab1 = ctrl.getTabuleiro2();
 					masc = mascaraTabuleiro2;
 				}
-				//System.out.print(ctrl.tabuleiro1[i][j]);
 				if(masc[i][j] == 10)
 					g2d.setPaint(new Color(0, 0, 255, 255));
 				else if (masc[i][j] < 0)
 					g2d.setPaint(new Color(255, 0, 0, 255));
-				else if(conteudoTab1[i][j] == 1)
+				else if(conteudoTab1[i][j] == 1) 
 					g2d.setPaint(new Color(64, 85, 27, 255));
-				else if(conteudoTab1[i][j] == 2)
+				else if(conteudoTab1[i][j] == 2) 
 					g2d.setPaint(new Color(74, 148, 62, 255));
 				else if(conteudoTab1[i][j] == 3)
 					g2d.setPaint(new Color(255, 227, 72, 255));
-				else if(conteudoTab1[i][j] == 4)
+				else if(conteudoTab1[i][j] == 4) 
 					g2d.setPaint(new Color(255, 167, 28, 255));
-				else if(conteudoTab1[i][j] == 5)
+				else if(conteudoTab1[i][j] == 5) 
 					g2d.setPaint(new Color(155, 84, 22, 255));
 				else 
 					g2d.setPaint(new Color(0,0,0,0));
@@ -147,7 +152,6 @@ public class PNBatalha extends JPanel implements MouseListener {
 				} else {
 					conteudoTab2 = mascaraTabuleiro2;
 				}
-				//System.out.print(ctrl.tabuleiro1[i][j]);
 				if(conteudoTab2[i][j] == 10)
 					g2d.setPaint(new Color(0, 0, 255, 255));
 				else if(conteudoTab2[i][j] == 1 || conteudoTab2[i][j] == -1)
@@ -200,15 +204,36 @@ public class PNBatalha extends JPanel implements MouseListener {
 				g.setVisible(true);
 				SwingUtilities.getWindowAncestor(this).dispose();
 			}
-			else if(ctrl.fimDeVez() == true){
-				System.out.printf("(%.2f, %.2f)\n", x, y);
-				salvar.setEnabled(true);
-				passarVez.setEnabled(true);
-				salvar.addActionListener(new ActionListener() { //TODO: observer do salvar
-					public void actionPerformed(ActionEvent e) {
-						ctrl.salvarJogo(ctrl.getFimDeVez(), ctrl.getCtrlVez(), ctrl.getPontosJogador1() , ctrl.getPontosJogador2());
-					}
-				});
+			else {
+				int ultimoTiro = ctrl.getUltimoTiro();
+				if(ultimoTiro == 1) {
+					navio = "hidroaviao";
+				}
+				if(ultimoTiro == 2) {
+					navio = "submarino";
+				}
+				if(ultimoTiro == 3) {
+					navio = "destroyer";
+				}
+				if(ultimoTiro == 4) {
+					navio = "cruzador";
+				}
+				if(ultimoTiro == 5) {
+					navio = "couracado";
+				}
+				situacao.setText("Parte do " + navio + " acertada");
+				if(ultimoTiro == 10) {
+					situacao.setText("Tiro na agua");
+				}
+				if(ctrl.fimDeVez() == true){
+					salvar.setEnabled(true);
+					passarVez.setEnabled(true);
+					salvar.addActionListener(new ActionListener() { //TODO: observer do salvar
+						public void actionPerformed(ActionEvent e) {
+							ctrl.salvarJogo(ctrl.getFimDeVez(), ctrl.getCtrlVez(), ctrl.getPontosJogador1() , ctrl.getPontosJogador2());
+						}
+					});
+				}
 			}
 		}
 		repaint();

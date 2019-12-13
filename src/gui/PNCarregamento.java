@@ -33,7 +33,6 @@ public class PNCarregamento extends JPanel{
 		JButton novo = new JButton();
 		JButton carrega = new JButton();
 		JLabel nome = new JLabel();
-		PNBatalha b = new PNBatalha(ctrl, m.getMain());
 		
 		nome.setText("Batalha Naval");
 		Font n = nome.getFont().deriveFont(Font.BOLD, 35);
@@ -63,7 +62,7 @@ public class PNCarregamento extends JPanel{
 			    		 fc.getSelectedFile().getName());
 			       		File arquivo = fc.getSelectedFile();
 			       		ctrl.carregarJogo(arquivo);
-			       		m.carregaBatalha(b);
+			       		m.carregaBatalha(new PNBatalha(m.getMain()));
 
 			    }
 		
