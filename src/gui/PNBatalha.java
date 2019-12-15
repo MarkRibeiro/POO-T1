@@ -36,7 +36,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 		adversarioAtual.setBounds(800, 20, 450, 15);
 		situacao.setBounds(550, 343, 200, 15);
 		jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
-		adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
+		adversarioAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeOponente() + " (adversario)");
 		add(jogadorAtual);
 		add(adversarioAtual);
 		add(situacao);
@@ -81,7 +81,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 				ctrl.passaVez();
 				situacao.setText("");
 				jogadorAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeVez());
-				adversarioAtual.setText("Tabuleiro de (adversario) " + ctrl.getCtrlNomeOponente());
+				adversarioAtual.setText("Tabuleiro de " + ctrl.getCtrlNomeOponente() + " (adversario)");
 				repaint();
 			}
 		});

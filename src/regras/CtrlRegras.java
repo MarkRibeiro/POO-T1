@@ -263,10 +263,10 @@ public class CtrlRegras {
 				/*Salvar tabuleiro 2*/
 				for (int i = 0; i<15; i++) {
 					for (int j = 0; j < 15; j++) {
-						if(mascaraTabuleiro1[j][i]<0) {
-							arq = arq + Integer.toString(mascaraTabuleiro1[j][i]);
+						if(mascaraTabuleiro2[j][i]<0) {
+							arq = arq + Integer.toString(mascaraTabuleiro2[j][i]);
 						} else {
-							arq = arq + Integer.toString(tabuleiro1[j][i]);
+							arq = arq + Integer.toString(tabuleiro2[j][i]);
 						}
 						if(i == 14 && j == 14) {
 							arq = arq + "\n";
@@ -276,8 +276,11 @@ public class CtrlRegras {
 						
 					}
 				}
-				
-				arq = arq + Integer.toString(vez) + "\n";
+				if(vez == 1) {
+					arq = arq + Integer.toString(2) + "\n";	
+				} else {
+					arq = arq + Integer.toString(1) + "\n";
+				}
 				arq = arq + Integer.toString(pontos1) + "\n";
 				arq = arq + Integer.toString(pontos2) + "\n";
 				arq = arq + jogadores[0] + "\n" + jogadores[1] + "\n";
