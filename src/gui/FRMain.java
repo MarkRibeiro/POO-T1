@@ -42,8 +42,8 @@ public class FRMain extends JFrame implements TrocaFase, Observer {
 		
 	}
 	@Override
-	public void notify(Observable o) {
-		Object lob[] =(Object[]) o.get();
+	public void notified(Object o) {
+		Object lob[] =(Object[]) ((Observable) o).get();
 		
 		
 		

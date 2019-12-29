@@ -47,7 +47,7 @@ public class Fachada {
 		return ctrl.ataque(linha, coluna);
 	}
 	
-	public void getTabuleiroPronto() {
+	public void tabuleiroPronto() {
 		ctrl.tabuleiroPronto();
 	}
 	
@@ -87,8 +87,8 @@ public class Fachada {
 		return ctrl.checarQuadrado(x, y);
 	}
 	
-	public void salvarJogo(boolean tresAtaques, int vez, int pontos1, int pontos2 ) {
-		ctrl.salvarJogo(tresAtaques, vez, pontos1, pontos2);
+	public void salvarJogo(boolean tresAtaques, int vez, int pontos1, int pontos2, File arquivo) {
+		ctrl.salvarJogo(tresAtaques, vez, pontos1, pontos2, arquivo);
 	}
 	
 	public boolean getFimDeVez() {
@@ -111,4 +111,11 @@ public class Fachada {
 		return ctrl.getUltimoTiro();
 	}
 	
+	public void addObserver(Observer o) {
+		ctrl.addObserver(o);
+	}
+
+	public void removeObserver(Observer o) {
+		ctrl.removeObserver(o);
+	}
 }

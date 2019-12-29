@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.awt.event.*;
 import regras.*;
  
-public class PNBatalha extends JPanel implements MouseListener {
+public class PNBatalha extends JPanel implements MouseListener, Observer {
 	double xIni=800.0,yIni=100.0,larg=30,alt=30,espLinha=0.0;
 	int iClick,jClick;
 	JLabel jogadorAtual, adversarioAtual;
@@ -48,7 +48,7 @@ public class PNBatalha extends JPanel implements MouseListener {
 			}
 			y+=alt+espLinha;
 		}
-		
+		ctrl.addObserver(this);
 		y=yIni;
 		for(int i=0;i<15;i++) {
 			x=xIni/16;
@@ -90,6 +90,20 @@ public class PNBatalha extends JPanel implements MouseListener {
 		salvar.setEnabled(false);
 		salvar.setText("Salvar Jogo");
 		salvar.setBounds(50, 590, 120, 30);
+		salvar.addActionListener(new ActionListener() { //TODO: observer do salvar
+			public void actionPerformed(ActionEvent e) {
+				if(ctrl.fimDeVez() == true){
+					JFileChooser fc = new JFileChooser();	
+					int returnVal = fc.showSaveDialog(getParent());
+				    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				       System.out.println("Voce escolheu salvar o jogo: " +
+			    		fc.getSelectedFile().getName());
+			       		File arquivo = fc.getSelectedFile();
+						ctrl.salvarJogo(ctrl.getFimDeVez(), ctrl.getCtrlVez(), ctrl.getPontosJogador1() , ctrl.getPontosJogador2(), arquivo);
+				    }
+				}
+			}
+		});
 		add(salvar);
 		setLayout(null);
 
@@ -99,6 +113,9 @@ public class PNBatalha extends JPanel implements MouseListener {
 		jogadorAtual.setText(ctrl.getCtrlNomeVez() + " posicione suas armas");
 	}
 	
+	void refreshInterface() {
+		repaint();
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2d=(Graphics2D) g;
@@ -228,15 +245,9 @@ public class PNBatalha extends JPanel implements MouseListener {
 				if(ctrl.fimDeVez() == true){
 					salvar.setEnabled(true);
 					passarVez.setEnabled(true);
-					salvar.addActionListener(new ActionListener() { //TODO: observer do salvar
-						public void actionPerformed(ActionEvent e) {
-							ctrl.salvarJogo(ctrl.getFimDeVez(), ctrl.getCtrlVez(), ctrl.getPontosJogador1() , ctrl.getPontosJogador2());
-						}
-					});
 				}
 			}
 		}
-		repaint();
 	}
 	
 	public void mouseEntered(MouseEvent e) {
@@ -245,4 +256,9 @@ public class PNBatalha extends JPanel implements MouseListener {
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
+
+	@Override
+	public void notified(Object o) {
+		refreshInterface();
+	}
 }

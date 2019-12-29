@@ -59,10 +59,10 @@ public class PNCarregamento extends JPanel{
 				int returnVal = fc.showOpenDialog(getParent());
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
 			       System.out.println("Voce escolheu abrir o jogo: " +
-			    		 fc.getSelectedFile().getName());
-			       		File arquivo = fc.getSelectedFile();
-			       		ctrl.carregarJogo(arquivo);
-			       		m.carregaBatalha(new PNBatalha(m.getMain()));
+		    		fc.getSelectedFile().getName());
+		       		File arquivo = fc.getSelectedFile();
+		       		ctrl.carregarJogo(arquivo);
+		       		m.carregaBatalha(new PNBatalha(m.getMain()));
 
 			    }
 		

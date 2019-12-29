@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.awt.event.*;
 import regras.*;
 
-public class PNArmas extends JPanel implements MouseListener, ArmasObserver, TrocaTabuleiros, KeyListener, Observable {
+public class PNArmas extends JPanel implements MouseListener, ArmasObserver, TrocaTabuleiros, KeyListener, Observer {
 	double xIni = 800.0, yIni = 100.0, larg = 30, alt = 30, espLinha = 0.0;
 	JLabel jogadorAtual;
 	double tamanhoQuadrado = 28;
@@ -15,11 +15,10 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	Celula tab[][] = new Celula[32][32];
 	Line2D.Double ln[] = new Line2D.Double[64];
 	Fachada ctrl;
-	boolean armaNoTab = false;
 	int xArmaTab = 0, yArmaTab = 0;
 	int matrizArmaTab[][];
 	int matrizTemporaria[][] = new int[15][15];
-	int indexArmaSelecionada = -1;
+	int indexArmaSelecionada = -100;
 	int contadorArmas = 0;
 	Arma arma;
 	ConjuntoArmas pintarArma;
@@ -51,7 +50,7 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 			}
 			y += alt + espLinha;
 		}
-
+		ctrl.addObserver(this);
 		addMouseListener(this);
 		addKeyListener(this);
 		setFocusable(true);
@@ -66,15 +65,16 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		pronto.setBounds(570, 590, 160, 30);
 		this.add(pronto);
 		//TODO: mudar de true para false
-		pronto.setEnabled(true);
+		pronto.setEnabled(false);
 		pronto.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ctrl.getTabuleiroPronto();
+				ctrl.tabuleiroPronto();
 				//TODO: Descomentar a linha a baixo
-				//pronto.setEnabled(false);
+				pronto.setEnabled(false);
 				contadorArmas = 0;
+				repaint();
 			}
 		});
 		this.setLayout(null);
@@ -298,48 +298,14 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 		y -= yIni;
 		x = Math.floor(x / larg);
 		y = Math.floor(y / alt);
+		if (indexArmaSelecionada != -100) {
+			indexArmaSelecionada = posicao;
+		}
 		if (e.getButton() != MouseEvent.BUTTON3) {
 			if (x >= 0 && y >= 0 && x <= 15 && y <= 15) {
 				xArmaTab = (int) x;
 				yArmaTab = (int) y;
-				armaNoTab = true;
-				matrizArmaTab = todasAsArmas.get(posicao).getArma().getMatriz();
-				contadorArmas++;
 				indexArmaSelecionada = posicao;
-				if (contadorArmas == 15) {
-					pronto.setEnabled(true);
-				}
-
-				for (int i = 0; i < 15; i++) {
-					for (int j = 0; j < 15; j++) {
-						matrizTemporaria[i][j] = 0;
-					}
-				}
-				
-				boolean conflito = false;
-				t: for (int i = 0; i < matrizArmaTab.length; i++) {
-					for (int j = 0; j < matrizArmaTab[i].length; j++) {
-						if (matrizArmaTab[i][j] == 1) {
-							if (ctrl.checarQuadrado(xArmaTab + j, yArmaTab + i) == false) {
-								conflito = true;
-								break t;
-							}
-						}
-					}
-				}
-				if (conflito == false) {
-					for (int i = 0; i < matrizArmaTab.length; i++) {
-						for (int j = 0; j < matrizArmaTab[i].length; j++) {
-							if (matrizArmaTab[i][j] == 1) {
-								tab[yArmaTab + i][xArmaTab + j].arma = todasAsArmas.get(posicao).getArma();
-								ctrl.getSoltaMouse(yArmaTab + i, xArmaTab + j, 1);
-								matrizTemporaria[yArmaTab + i][xArmaTab + j] = 1;
-								this.remove(todasAsArmas.get(posicao));
-							}
-						}
-					}
-				}
-
 			} else {
 				this.add(todasAsArmas.get(posicao));
 			}
@@ -362,10 +328,11 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	}
 
 	void cancelarNavio() {
+		contadorArmas--;
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
 				if (matrizTemporaria[i][j] != 0) {
-					add(todasAsArmas.get(indexArmaSelecionada));
+					add(todasAsArmas.get(Math.abs(indexArmaSelecionada)));
 					tab[i][j].arma = null;
 					ctrl.getSoltaMouse(i, j, 0);
 					matrizTemporaria[i][j] = 0;
@@ -378,29 +345,67 @@ public class PNArmas extends JPanel implements MouseListener, ArmasObserver, Tro
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			cancelarNavio();
+			if (indexArmaSelecionada == -100) {
+				
+			}
+			else if (indexArmaSelecionada >= 0) {
+				int posicao = indexArmaSelecionada;
+				indexArmaSelecionada = -indexArmaSelecionada-1;
+				matrizArmaTab = todasAsArmas.get(posicao).getArma().getMatriz();
+	
+				for (int i = 0; i < 15; i++) {
+					for (int j = 0; j < 15; j++) {
+						matrizTemporaria[i][j] = 0;
+					}
+				}
+				
+				boolean conflito = false;
+				t: for (int i = 0; i < matrizArmaTab.length; i++) {
+					for (int j = 0; j < matrizArmaTab[i].length; j++) {
+						if (matrizArmaTab[i][j] == 1) {
+							if (ctrl.checarQuadrado(xArmaTab + j, yArmaTab + i) == false) {
+								conflito = true;
+								break t;
+							}
+						}
+					}
+				}
+				if (conflito == false) {
+					contadorArmas++;
+					for (int i = 0; i < matrizArmaTab.length; i++) {
+						for (int j = 0; j < matrizArmaTab[i].length; j++) {
+							if (matrizArmaTab[i][j] == 1) {
+								tab[yArmaTab + i][xArmaTab + j].arma = todasAsArmas.get(posicao).getArma();
+								ctrl.getSoltaMouse(yArmaTab + i, xArmaTab + j, 1);
+								matrizTemporaria[yArmaTab + i][xArmaTab + j] = 1;
+								this.remove(todasAsArmas.get(posicao));
+							}
+						}
+					}
+				}
+			} else {
+				indexArmaSelecionada = -indexArmaSelecionada-1;
+				cancelarNavio();
+			}
+			pronto.setEnabled(contadorArmas == 15);
 		}
+		repaint();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-
-	@Override
-	public void addObserver(Observer o) {
-		obs.add(o);
-		
+	
+	void refreshInterface() {
+		repaint();
 	}
 
 	@Override
-	public void removeObserver(Observer o) {
-		obs.remove(o);
-	}
-
-	@Override
-	public Object get() {
-		Object info[] = new Object[1]; 
-		info[0] = "t";
-		return info;
+	public void notified(Object o) {
+		if (o == "troca") {
+			atualizaInterface();
+		} else {
+			refreshInterface();
+		}
 	}
 }

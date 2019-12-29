@@ -6,12 +6,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 import gui.FRGanhador;
 
-public class CtrlRegras {
+public class CtrlRegras implements Observable {
 	private int vez=1;
 	private int jogadas = 9;
 	private int prontos = 0;
@@ -20,6 +21,8 @@ public class CtrlRegras {
 	private int jogadasNaRodada = 0;
 	private TrocaTabuleiros painel;
 	private String jogadores[] = new String[2];
+	ArrayList<Observer> obs=new ArrayList<Observer>();
+	private int maxAtaques = 3;
 	static CtrlRegras global = new CtrlRegras();
 	private int ultimoTiro;
 	private int tabuleiro1 [][]= { 
@@ -131,11 +134,13 @@ public class CtrlRegras {
 	}	
 	
 	public void soltaMouse(int linha, int coluna, int tipo) {
+		int[][] tab = null;
 		if(getVez() == 1) {
-			tabuleiro1[linha][coluna] = tipo;
-		}else {
-			tabuleiro2[linha][coluna] = tipo;
+			tab = tabuleiro1;
+		} else {
+			tab = tabuleiro2;
 		}
+		tab[linha][coluna] = tipo;
 	}
 	
 	boolean checarQuadrado(int x, int y) {
@@ -158,7 +163,7 @@ public class CtrlRegras {
 	}
 	
 	public boolean ataque(int linha, int coluna) {
-		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0 && jogadasNaRodada < 3) {
+		if(getVez()==1 && mascaraTabuleiro2[linha][coluna] == 0 && jogadasNaRodada < maxAtaques) {
 			if(tabuleiro2[linha][coluna] == 0) {
 				mascaraTabuleiro2[linha][coluna] = 10;
 				tabuleiro2[linha][coluna] = 10;
@@ -175,7 +180,8 @@ public class CtrlRegras {
 			}
 			ultimoTiro = tabuleiro2[linha][coluna];
 			jogadasNaRodada += 1;
-		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jogadasNaRodada < 3) {
+			notifyObservers("jogada");
+		} else if(getVez()==2 && mascaraTabuleiro1[linha][coluna] == 0 && jogadasNaRodada < maxAtaques) {
 			if(tabuleiro1[linha][coluna] == 0) {
 				mascaraTabuleiro1[linha][coluna] = 10;
 				tabuleiro1[linha][coluna] = 10;
@@ -192,6 +198,7 @@ public class CtrlRegras {
 			}
 			ultimoTiro = tabuleiro1[linha][coluna];
 			jogadasNaRodada += 1;
+			notifyObservers("jogada");
 		}
 		return quemGanhou();
 	}
@@ -202,11 +209,12 @@ public class CtrlRegras {
 	
 	boolean quemGanhou() {
 		// TODO: Mudar de 10 para 98
-		if(pontosJ1 == 10) {
+		if(pontosJ1 == 98) {
 			return false;
-		} else if(pontosJ2 == 10) {
+		} else if(pontosJ2 == 98) {
 			return false;
 		}
+		notifyObservers("Ganhador");
 		return true;
 	}
 	
@@ -216,11 +224,13 @@ public class CtrlRegras {
 			painel.trocaTabuleiros();
 			vez = 1;
 			painel.fimPosicionamento();
-			painel.atualizaInterface();
+			//painel.atualizaInterface();
+			notifyObservers("troca");
 		}else {
 			painel.trocaTabuleiros();
 			vez=2;
-			painel.atualizaInterface();
+			//painel.atualizaInterface();
+			notifyObservers("troca");
 		}
 	}
 	
@@ -234,46 +244,36 @@ public class CtrlRegras {
 	}
 	
 	
-	public void salvarJogo(boolean fimDeVez, int vez, int pontos1, int pontos2 ) {
+	public void salvarJogo(boolean fimDeVez, int vez, int pontos1, int pontos2, File arquivo) {
 		if(fimDeVez == true) {
-			File arquivo;
 			FileWriter fr = null;
 			String arq = "";
 			try {
-				arquivo = new File("BatalhaNaval.txt");
 				fr = new FileWriter(arquivo);
-				
-				/*Salvar tabuleiro 1*/
-				for (int i = 0; i<15; i++) {
-					for (int j = 0; j < 15; j++) {
-						if(mascaraTabuleiro1[j][i]<0) {
-							arq = arq + Integer.toString(mascaraTabuleiro1[j][i]);
-						} else {
-							arq = arq + Integer.toString(tabuleiro1[j][i]);
-						}
-						if(i == 14 && j == 14) {
-							arq = arq + "\n";
- 						} else {
- 							arq = arq + ";"; 
- 						}
-						
+				for (int jogad = 0; jogad <= 1; jogad++) {
+					int[][] masc = null, tab = null;
+					if (jogad == 0) {
+						masc = mascaraTabuleiro1;
+						tab = tabuleiro1;
+					} else {
+						masc = mascaraTabuleiro2;
+						tab = tabuleiro2;
 					}
-				}
-				
-				/*Salvar tabuleiro 2*/
-				for (int i = 0; i<15; i++) {
-					for (int j = 0; j < 15; j++) {
-						if(mascaraTabuleiro2[j][i]<0) {
-							arq = arq + Integer.toString(mascaraTabuleiro2[j][i]);
-						} else {
-							arq = arq + Integer.toString(tabuleiro2[j][i]);
+					/*Salvar tabuleiro */
+					for (int i = 0; i<15; i++) {
+						for (int j = 0; j < 15; j++) {
+							if(masc[j][i]<0) {
+								arq = arq + Integer.toString(masc[j][i]);
+							} else {
+								arq = arq + Integer.toString(tab[j][i]);
+							}
+							if(i == 14 && j == 14) {
+								arq = arq + "\n";
+	 						} else {
+	 							arq = arq + ";"; 
+	 						}
+							
 						}
-						if(i == 14 && j == 14) {
-							arq = arq + "\n";
- 						} else {
- 							arq = arq + ";"; 
- 						}
-						
 					}
 				}
 				if(vez == 1) {
@@ -312,25 +312,26 @@ public class CtrlRegras {
 	    	linha = sc.nextLine();
 	    	String infoJogo[]= linha.split(";");
 	    	int v =0 ;
+	    	int[][] masc = null, tab = null;
 	    	if(numLinha == 0) {
+	    		masc = mascaraTabuleiro1;
+	    		tab = tabuleiro1;
+	    	} else if (numLinha == 1) {
+	    		masc = mascaraTabuleiro2;
+	    		tab = tabuleiro2;
+	    	}
+	    	if (numLinha == 0 || numLinha == 1) {
 	    		for (int coluna = 0; coluna<15; coluna++) {
 	    			for (int fileira = 0; fileira < 15; fileira++) {
 	    	    		quadrado = Integer.parseInt(infoJogo[v++]);
-	    				if(quadrado < 0 || quadrado == 10) {
-	    					mascaraTabuleiro1[fileira][coluna] = quadrado;
+	    				if(quadrado < 0) {
+	    					masc[fileira][coluna] = quadrado;
+	    					tab[fileira][coluna] = -quadrado;
+	    				} else if (quadrado == 10) {
+	    					masc[fileira][coluna] = quadrado;
+	    					tab[fileira][coluna] = quadrado;
 	    				} else {
-	    					tabuleiro1[fileira][coluna] = quadrado;
-	    				}
-	    			}
-	    		}
-	    	} else if (numLinha == 1){
-	    		for (int coluna = 0; coluna <15; coluna ++) {
-	    			for (int fileira = 0; fileira < 15; fileira++) {
-		    			quadrado = Integer.parseInt(infoJogo[v++]);
-	    				if(quadrado < 0 || quadrado == 10) {
-	    					mascaraTabuleiro2[fileira][coluna] = quadrado;
-	    				} else {
-	    					tabuleiro2[fileira][coluna] = quadrado;
+	    					tab[fileira][coluna] = quadrado;
 	    				}
 	    			}
 	    		}
@@ -356,7 +357,7 @@ public class CtrlRegras {
 	}
 	
 	public boolean fimDeVez() {
-		if(jogadasNaRodada == 3)
+		if(jogadasNaRodada == maxAtaques)
 			return true;
 		else
 			return false;
@@ -388,6 +389,28 @@ public class CtrlRegras {
 	
 	public int PontosJ2() {
 		return pontosJ2;
+	}
+
+	@Override
+	public void addObserver(Observer o) {
+		obs.add(o);
+	}
+
+	@Override
+	public void removeObserver(Observer o) {
+		obs.remove(o);
+	}
+
+	public void notifyObservers(Object notification) {
+		for (int i = 0; i < obs.size(); i++) {
+			obs.get(i).notified(notification);
+		}
+	}
+	@Override
+	public Object get() {
+		Object info[] = new Object[1]; 
+		info[0] = "t";
+		return info;
 	}
 	
 	

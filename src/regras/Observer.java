@@ -1,5 +1,5 @@
 package regras;
 
 public interface Observer {
-	public void notify(Observable o);
+	public void notified(Object o);
 }
